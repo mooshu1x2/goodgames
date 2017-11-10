@@ -1,2 +1,8 @@
 Django==1.11.7
 pytz==2017.3
+django-import-export==0.5.1
+Pillow==4.3.0
+django-rest-framework==0.1.0
+django-rest-auth==0.9.2
+django-rest-framework-docs==0.1.7
+django-allauth==0.34.0

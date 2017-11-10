@@ -30,14 +30,37 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 ]
+
+OUR_APPS = [
+    'accounts',
+    'base',
+    'games',
+    'web',
+]
+
+THIRD_PARTY_APPS = [
+    'allauth',
+    'allauth.account',
+    # 'corsheaders',
+    'import_export',
+    'rest_auth',
+    'rest_auth.registration',
+    'rest_framework.authtoken',
+    'rest_framework',
+    'rest_framework_docs',
+    # 'rest_framework_expiring_authtoken',
+]
+
+INSTALLED_APPS = DEFAULT_APPS + OUR_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,3 +141,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
