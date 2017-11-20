@@ -9,6 +9,11 @@ __pycache__
 env
 venv
 
+# 
+db.sqlite3
+scripts/scraper/*.csv
+scripts/scraper/*.xlsx
+
 MANIFEST
 dist/
 docs/_build/
