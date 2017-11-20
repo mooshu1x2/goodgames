@@ -1,10 +1,10 @@
 {
-  "name": "frontend",
+  "name": "goodgames",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --no-delete-output-path",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
