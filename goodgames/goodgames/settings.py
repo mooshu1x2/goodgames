@@ -50,13 +50,16 @@ OUR_APPS = [
 THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    # include providers you want to enable
+    'allauth.socialaccount.providers.google',
     # 'corsheaders',
     'import_export',
     'rest_auth',
     'rest_auth.registration',
     'rest_framework.authtoken',
     'rest_framework',
-    'rest_framework_docs',
+    'rest_framework_swagger',
     # 'rest_framework_expiring_authtoken',
 ]
 
@@ -74,10 +77,26 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'goodgames.urls'
 
+LOGIN_REDIRECT_URL = '/fun/'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'email'
+        ],
+        'AUTH_PARAMS': { 'access_type': 'online' }
+    }
+}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,6 +121,14 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 
 # Password validation

@@ -15,10 +15,34 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+
+from rest_framework_swagger.views import get_swagger_view
+
+from web import views
+
+schema_view = get_swagger_view(title='GoodGames API')
+handler404 = 'web.views.page_not_found'
+handler500 = 'web.views.internal_server_error'
 
 urlpatterns = [
+    url(r'^$', views.home, name='home'),
+
+    url(r'^fun', views.fun_page, name='fun'),
+
+
+    url(r'^accounts/', include('allauth.urls')),
+
+    # url(r'^accounts/profile', views.ProfileView.as_view(), name='profile'),
+
     url(r'^admin/', admin.site.urls),
 
-    url(r'^games/', include('games.urls')),
-
+    url(r'^api/games/', include('games.urls', namespace='games')),
+    url(r'^api/web/',  include('web.urls', namespace='web')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+                    url(r'^docs/', schema_view),
+                    url(r'^api/admin-auth/', include('rest_framework.urls', namespace='rest_framework')),
+                    ]

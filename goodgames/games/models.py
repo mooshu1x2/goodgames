@@ -10,6 +10,7 @@ from base.models import (TimeStampedModel, )
 
 class Game(TimeStampedModel):
 	# Platforms
+	UNK = 'Unknown'
 	# Old School
 	ATARI = '2600'
 	SEGA = 'GEN'
@@ -86,6 +87,7 @@ class Game(TimeStampedModel):
 		(WIIU, 'WiiU'),
 		(SWITCH, 'Nintendo Switch'),
 		(PC, 'PC'),
+		(UNK, UNK),
 	)
 
 	GENRE_OPTIONS = (
@@ -101,6 +103,7 @@ class Game(TimeStampedModel):
 		(SPORTS, SPORTS),
 		(STRATEGY, STRATEGY),
 		(MISC, MISC),
+		(UNK, UNK)
 	)
 
 	RATING_OPTIONS = (
@@ -112,37 +115,40 @@ class Game(TimeStampedModel):
 		(M, 'Mature'),
 		(AO, 'Adults Only'),
 		(KA, 'Kids to Adults'),
+		(UNK, UNK)
 	)
 
+	# Required
 	title = models.CharField(max_length=120)
 	is_sequel = models.BooleanField(default=False)
-	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS)
-	release_date = models.DateField('release date')
-	release_year = models.DateField('release year')
-	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS)
-	publisher = models.CharField(max_length=120)
-	developer = models.CharField(max_length=120)
-	rating = models.CharField(max_length=30, choices=RATING_OPTIONS)
+	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS, default=UNK)
+	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS, default=UNK)
+	rating = models.CharField(max_length=30, choices=RATING_OPTIONS, default=UNK)
 
-	# Sales data
-	na_sales = models.DecimalField(decimal_places=2, max_digits=3)
-	eu_sales = models.DecimalField(decimal_places=2, max_digits=3)
-	jp_sales = models.DecimalField(decimal_places=2, max_digits=3)
-	ot_sales = models.DecimalField(decimal_places=2, max_digits=3)
-	gb_sales = models.DecimalField(decimal_places=2, max_digits=3)
+	# Optional
+	release_date = models.DateField(null=True, blank=True)
+	release_year = models.DateField(null=True, blank=True)
+	publisher = models.CharField(max_length=120, blank=True)
+	developer = models.CharField(max_length=120, blank=True)
 
-	# Reviews
-	critic_score = models.IntegerField()
-	critic_count = models.IntegerField()
-	user_score = models.DecimalField(decimal_places=1, max_digits=3)
-	user_count = models.IntegerField()
+	# Sales data (optional)
+	na_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
+	eu_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
+	jp_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
+	ot_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
+	gb_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
+
+	# Reviews (optional)
+	critic_score = models.IntegerField(null=True, blank=True)
+	critic_count = models.IntegerField(null=True, blank=True)
+	user_score = models.DecimalField(decimal_places=1, max_digits=3, null=True, blank=True)
+	user_count = models.IntegerField(null=True, blank=True)
 
 	# user = models.ForeignKey(User)
 	# team_name = models.ForeignKey('ChallengeHostTeam')
 
 	def __unicode__(self):
-		return '{0}:{1}:{2}'.format(self.title, self.genre,
-		                            self.permissions)
+		return '{0}:{1}:{2}:{3}'.format(self.title, self.genre, self.publisher, self.developer)
 
 	class Meta:
 		app_label = 'games'

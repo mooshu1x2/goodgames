@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GoodGames- Home Page</title>
+</head>
+<body>
+<h1>Fun Page!</h1>
+
+
+{% load i18n l10n account socialaccount staticfiles %}
+You're logged in with {{ user.getprovider }} as {{ user.firstname }} {{ user.lastname }}.</p>
+
+{% get_providers as socialaccount_providers %}
+{% for provider in socialaccount_providers %}
+  <li>
+<a title="{{ provider.name }}" class="socialaccount_provider {{ provider.id }}" href="{% provider_login_url provider.id process="login" %}">{{ provider.name }}</a>
+  </li>
+{% endfor %}
+
+</body>
+</html>
