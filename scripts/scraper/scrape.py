@@ -3,6 +3,8 @@
 import argparse
 import urllib2
 import datetime
+import json
+import io
 import time
 import ucsv as csv # Ugh. Python CSV module does not handle unicode. This extension works around that.
 import sys
@@ -69,12 +71,21 @@ def make_metacritic_url(vg_game_info):
 	
 	return url
 
+def make_metacritic_review_urls(vg_game_info):
+	url = make_metacritic_url(vg_game_info)
+	user_url = critic_url = None
+	if url:
+		user_url = url + "/user-reviews"
+		critic_url = url + "/critic-reviews"
+	return {'user': user_url, 'critic': critic_url}
+
 # Command-line argument parser.
 # You can also specific -h, --help at the command line 
 # to see which arguments are supported
 parser = argparse.ArgumentParser(description='VGChartz and MetaCritic Game Scraper.')
 parser.add_argument('-m', '--max', dest='max_games', type=int, default=0, help='Maximum number of games to scrape (0 to disable).')
 parser.add_argument('-s', '--start', dest='start_game', type=int, default=1, help='Start scraping from game N (1 to start at beginning).')
+parser.add_argument('-r', '--reviews', dest='capture_reviews', type=bool, default=False, help='Scrape user and critic reviews.')
 parser.add_argument('-w', '--wait', type=int, default=0, help='Number of seconds to wait before each request to MetaCritc (0 to disable).')
 args = parser.parse_args()
 
@@ -88,11 +99,16 @@ vgchartz_page = 1 # Which VGChartz Page are we on
 
 # Open our CSV file and write the headers
 now = datetime.datetime.now()
-csvfilename = "gamedata-" + now.strftime("%Y%m%d-%H_%M_%S") + ".csv"
-csvfile = open(csvfilename, "wb")
-gamewriter = csv.writer(csvfile)
-gamewriter.writerow(['DateTime:', str(now)])
-gamewriter.writerow(['name', 'platform', 'release year', 'genre', 'publisher', 'north america sales', 'europe sales', 'japan sales', 'rest of world sales', 'global sales', 'release date', 'critic score', 'critic outof', 'critic count', 'user score', 'user count', 'developer', 'rating'])
+# csvfilename = "gamedata-" + now.strftime("%Y%m%d-%H_%M_%S") + ".csv"
+# csvfile = open(csvfilename, "wb")
+# gamewriter = csv.writer(csvfile)
+# gamewriter.writerow(['DateTime:', str(now)])
+# gamewriter.writerow(['name', 'platform', 'release year', 'genre', 'publisher', 'north america sales', 'europe sales', 'japan sales', 'rest of world sales', 'global sales', 'release date', 'critic score', 'critic outof', 'critic count', 'user score', 'user count', 'developer', 'rating'])
+
+# Do the same in JSON
+jsonfilename = "gamedata-" + now.strftime("%Y%m%d-%H_%M_%S") + ".json"
+
+results = {"games": []}
 
 start_time = time.time()
 while games_available:
@@ -104,7 +120,7 @@ while games_available:
 	vgchartz_html = vgchartz_conn.read()
 	sys.stdout.write("connected.\n")
 	
-	vgsoup = BeautifulSoup(vgchartz_html)
+	vgsoup = BeautifulSoup(vgchartz_html, "html.parser")
 	rows = vgsoup.find("table", class_="chart").find_all("tr")
 	
 	# For each row, scrape the game information from VGChartz
@@ -133,22 +149,57 @@ while games_available:
 			# if (vg_game_info["platform"] not in platforms_to_include):
 			# 	print "Game not from interesting platform" + vg_game_info["platform"] + ". Skipping."
 			# 	continue
-				
+			metacritic_review_urls = None
+			if args.capture_reviews:
+				metacritic_review_urls = make_metacritic_review_urls(vg_game_info)
+
 			# Make MetaCritic URL				
 			metacritic_url = make_metacritic_url(vg_game_info)
 			if (args.wait > 0):
 				time.sleep(args.wait) # Option to sleep before connecting so MetaCritic doesn't throttle/block us.
-			metacritic_scraper = MetaCriticScraper(metacritic_url)
+
+			if args.capture_reviews:
+				metacritic_scraper = MetaCriticScraper(metacritic_url, reviews=True, critic_url=metacritic_review_urls['critic'], user_url=metacritic_review_urls['user'])
+			else:
+				metacritic_scraper = MetaCriticScraper(metacritic_url)
+
 			# Write everything to the CSV. MetaCritic data will be blank if we could not get it.
-			gamewriter.writerow([vg_game_info["name"], vg_game_info["platform"], vg_game_info["year"], vg_game_info["genre"], \
-								vg_game_info["publisher"], vg_game_info["na_sales"], vg_game_info["eu_sales"], vg_game_info["ja_sales"], \
-								vg_game_info["rest_sales"], vg_game_info["global_sales"], metacritic_scraper.game["release_date"], \
-								metacritic_scraper.game["critic_score"], metacritic_scraper.game["critic_outof"], \
-								metacritic_scraper.game["critic_count"], metacritic_scraper.game["user_score"], \
-								metacritic_scraper.game["user_count"], metacritic_scraper.game["developer"], \
-								metacritic_scraper.game["rating"]])
+			# gamewriter.writerow([vg_game_info["name"], vg_game_info["platform"], vg_game_info["year"], vg_game_info["genre"], \
+			# 					vg_game_info["publisher"], vg_game_info["na_sales"], vg_game_info["eu_sales"], vg_game_info["ja_sales"], \
+			# 					vg_game_info["rest_sales"], vg_game_info["global_sales"], metacritic_scraper.game["release_date"], \
+			# 					metacritic_scraper.game["critic_score"], metacritic_scraper.game["critic_outof"], \
+			# 					metacritic_scraper.game["critic_count"], metacritic_scraper.game["user_score"], \
+			# 					metacritic_scraper.game["user_count"], metacritic_scraper.game["developer"], \
+			# 					metacritic_scraper.game["rating"]])
 			#csvfile.flush()
-			
+
+			# Pull it all together now
+
+			data = {
+				"name": vg_game_info["name"],
+				"platform": vg_game_info["platform"],
+				"release_year": vg_game_info["year"],
+				"genre": vg_game_info["genre"],
+				"publisher": vg_game_info["publisher"],
+				"na_sales": vg_game_info["na_sales"],
+				"eu_sales": vg_game_info["eu_sales"],
+				"jp_sales": vg_game_info["ja_sales"],
+				"rw_sales": vg_game_info["rest_sales"],
+				"gl_sales": vg_game_info["global_sales"],
+				"release_date": metacritic_scraper.game["release_date"],
+				"critic_score": metacritic_scraper.game["critic_score"],
+				"critic_outof": metacritic_scraper.game["critic_outof"],
+				"critic_count": metacritic_scraper.game["critic_count"],
+				"critic_reviews": metacritic_scraper.game["critic_reviews"],
+				"user_score": metacritic_scraper.game["user_score"],
+				"user_count": metacritic_scraper.game["user_count"],
+				"user_reviews": metacritic_scraper.game["user_reviews"],
+				"developer": metacritic_scraper.game["developer"],
+				"rating": metacritic_scraper.game["rating"]
+			}
+
+			results["games"].append(data)
+
 			# We successfully scraped a single game. If we hit max_games, quit. Otherwise, loop to the next game.
 			games_scraped += 1
 			if (args.max_games > 0 and args.max_games == games_scraped):
@@ -157,7 +208,11 @@ while games_available:
 				break
 	vgchartz_page += 1
 
-csvfile.close()
+# csvfile.close()
+with io.open(jsonfilename, 'w', encoding='utf-8') as outfile:
+	outfile.write(json.dumps(results, ensure_ascii=False, sort_keys=True, indent=4))
+
+
 elapsed_time = time.time() - start_time
 print "Scraped", games_scraped, "games in", round(elapsed_time, 2), "seconds."
-print "Wrote scraper data to", csvfilename
+print "Wrote scraper data to", jsonfilename

@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import urllib2
 
 class MetaCriticScraper:
-	def __init__(self, url):
+	def __init__(self, url, reviews=False, **kwargs):
 		self.game = {'url': '',
 					 'title': '',
 					 'platform': '',
@@ -15,9 +15,16 @@ class MetaCriticScraper:
 					 'user_count': '',
 					 'developer': '',
 					 'genre': '',
-					 'rating': ''
+					 'rating': '',
 					}
-		
+
+		self.reviews = reviews
+		if self.reviews:
+			self.game['critic_reviews'] = []
+			self.game['critic_review_url'] = kwargs.get('critic_url')
+			self.game['user_reviews'] = []
+			self.game['user_review_url'] = kwargs.get('user_url')
+
 		try:
 			req = urllib2.Request(url)
 			req.add_unredirected_header('User-Agent','Mozilla/5.0')
@@ -25,11 +32,25 @@ class MetaCriticScraper:
 			self.game['url'] = metacritic_url.geturl()
 			html = metacritic_url.read()
 			
-			self.soup = BeautifulSoup(html)
+			self.soup = BeautifulSoup(html, "html.parser")
+
+			if self.reviews:
+				req = urllib2.Request(self.game['critic_review_url'])
+				req.add_unredirected_header('User-Agent', 'Mozilla/5.0')
+				metacritic_url = urllib2.urlopen(req, timeout=10)
+				html = metacritic_url.read()
+				self.criticReviewSoup = BeautifulSoup(html, "html.parser")
+
+				req = urllib2.Request(self.game['user_review_url'])
+				req.add_unredirected_header('User-Agent', 'Mozilla/5.0')
+				metacritic_url = urllib2.urlopen(req, timeout=10)
+				html = metacritic_url.read()
+				self.userReviewSoup = BeautifulSoup(html, "html.parser")
+
 			self.scrape()
 		except:
 			pass
-	
+
 	def scrape(self):
 		# Get Title and Platform. If site changes and we can't find the right divs or classes
 		# skip and leave these values as empty strings
@@ -84,3 +105,22 @@ class MetaCriticScraper:
 		except:
 			print "WARNING: Problem getting miscellaneous game information"
 			pass
+
+		if self.reviews:
+			try:
+				# User Reviews
+				user_review = self.userReviewSoup.find("ol", class_="reviews user_reviews").find_all("li", class_="review user_review")
+
+				for review in user_review:
+					comment = review.find("div", class_="review_body").text.strip()
+					self.game['user_reviews'].append(comment)
+
+				# Critic Reviews
+				critic_review = self.criticReviewSoup.find("ol", class_="reviews critic_reviews").find_all("li", class_="review critic_review")
+
+				for review in critic_review:
+					comment = review.find("div", class_="review_body").text.strip()
+					self.game['critic_reviews'].append(comment)
+
+			except:
+				print "WARNING: Problem getting user or critic reviews"
