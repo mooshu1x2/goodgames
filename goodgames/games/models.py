@@ -46,7 +46,7 @@ class Game(TimeStampedModel):
 	PLATFORM = 'Platform'
 	PUZZLE = 'Puzzle'
 	RACING = 'Racing'
-	RPG = 'Role-playing'
+	RPG = 'Role-Playing'
 	SHOOTER = 'Shooter'
 	SIMULATION = 'Simulation'
 	SPORTS = 'Sports'
@@ -120,28 +120,28 @@ class Game(TimeStampedModel):
 
 	# Required
 	title = models.CharField(max_length=120)
-	is_sequel = models.BooleanField(default=False)
+	# is_sequel = models.BooleanField(default=False)
 	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS, default=UNK)
 	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS, default=UNK)
 	rating = models.CharField(max_length=30, choices=RATING_OPTIONS, default=UNK)
 
 	# Optional
 	release_date = models.DateField(null=True, blank=True)
-	release_year = models.DateField(null=True, blank=True)
+	# release_year = models.DateField(null=True, blank=True)
 	publisher = models.CharField(max_length=120, blank=True)
 	developer = models.CharField(max_length=120, blank=True)
 
 	# Sales data (optional)
-	na_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
-	eu_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
-	jp_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
-	ot_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
-	gb_sales = models.DecimalField(decimal_places=2, max_digits=3, null=True, blank=True)
+	na_sales = models.DecimalField(decimal_places=2, max_digits=6, null=True, blank=True)
+	eu_sales = models.DecimalField(decimal_places=2, max_digits=6, null=True, blank=True)
+	jp_sales = models.DecimalField(decimal_places=2, max_digits=6, null=True, blank=True)
+	ot_sales = models.DecimalField(decimal_places=2, max_digits=6, null=True, blank=True)
+	gb_sales = models.DecimalField(decimal_places=2, max_digits=6, null=True, blank=True)
 
 	# Reviews (optional)
 	critic_score = models.IntegerField(null=True, blank=True)
 	critic_count = models.IntegerField(null=True, blank=True)
-	user_score = models.DecimalField(decimal_places=1, max_digits=3, null=True, blank=True)
+	user_score = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True)
 	user_count = models.IntegerField(null=True, blank=True)
 
 	# user = models.ForeignKey(User)
@@ -193,16 +193,14 @@ class GameList(TimeStampedModel):
 
 class Comment(TimeStampedModel):
 	description = models.CharField(max_length=500)
-	reviewer = models.CharField(max_length=120)
 	is_critic = models.BooleanField(default=False)
 	is_user = models.BooleanField(default=False)
 
 	game = models.ForeignKey(Game)
 
 	def __unicode__(self):
-		return '{0}:{1}:{2}:{3}:{4}'.format(self.game, self.description,
-		                                    self.reviewer, self.is_critic,
-		                                    self.is_user)
+		return '{0}:{1}:{2}:{3}'.format(self.game, self.description,
+		                                    self.is_critic, self.is_user)
 
 	class Meta:
 		app_label = 'games'
@@ -211,5 +209,5 @@ class Comment(TimeStampedModel):
 			models.Index(fields=['game', 'is_critic']),
 			models.Index(fields=['game', 'is_user'])
 		]
-		unique_together = ('game', 'description')
+		# unique_together = ('game', 'description')
 
