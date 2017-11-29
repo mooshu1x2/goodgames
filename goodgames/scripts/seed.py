@@ -1,5 +1,4 @@
-# Command to run : python manage.py shell --settings=settings.dev  <
-# scripts/seed.py
+# Command to run : python manage.py seed
 import os
 import json
 import datetime
@@ -46,6 +45,7 @@ def create_game():
 
 	games = data['games']
 	for d in games:
+		print("Creating game {}...".format(d['name']))
 		game = Game.objects.create(
 				title=d["name"],
 				platform=d["platform"],
@@ -67,19 +67,22 @@ def create_game():
 		)
 
 		critic_reviews = d['critic_reviews']
+		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), d['name']))
 		for c in critic_reviews:
+			# Quick and dirty way to restrict length of comment to 1024 characters
 			comment = Comment.objects.create(
 					game=game,
-					description=c,
+					description=c[:1024] if len(c) > 1024 else c,
 					is_critic=True,
 					is_user=False,
 			)
 
 		user_reviews = d['user_reviews']
+		print("Creating {} user reviews for game {}...".format(len(user_reviews), d['name']))
 		for u in user_reviews:
 			comment = Comment.objects.create(
 					game=game,
-					description=u,
+					description=u[:1024] if len(u) > 1024 else u,
 					is_critic=False,
 					is_user=True,
 			)

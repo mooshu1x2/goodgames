@@ -144,9 +144,6 @@ class Game(TimeStampedModel):
 	user_score = models.DecimalField(decimal_places=1, max_digits=6, null=True, blank=True)
 	user_count = models.IntegerField(null=True, blank=True)
 
-	# user = models.ForeignKey(User)
-	# team_name = models.ForeignKey('ChallengeHostTeam')
-
 	def __unicode__(self):
 		return '{0}:{1}:{2}:{3}'.format(self.title, self.genre, self.publisher, self.developer)
 
@@ -192,7 +189,7 @@ class GameList(TimeStampedModel):
 
 
 class Comment(TimeStampedModel):
-	description = models.CharField(max_length=500)
+	description = models.CharField(max_length=1024)
 	is_critic = models.BooleanField(default=False)
 	is_user = models.BooleanField(default=False)
 
@@ -200,7 +197,7 @@ class Comment(TimeStampedModel):
 
 	def __unicode__(self):
 		return '{0}:{1}:{2}:{3}'.format(self.game, self.description,
-		                                    self.is_critic, self.is_user)
+		                                self.is_critic, self.is_user)
 
 	class Meta:
 		app_label = 'games'

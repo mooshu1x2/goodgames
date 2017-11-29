@@ -9,10 +9,12 @@ __pycache__
 env
 venv
 
-# 
+#
+lib
 db.sqlite3
 scripts/scraper/*.csv
 scripts/scraper/*.xlsx
+scripts/scraper/*.json
 
 MANIFEST
 dist/
@@ -23,3 +25,7 @@ tests/coverage_html/
 tests/.coverage
 build/
 tests/report/
+*/static
+
+#
+cloud_sql_proxy

@@ -1,5 +1,5 @@
-# Command to run : python manage.py shell --settings=settings.dev  <
-# scripts/seed.py
+# Command to run : python manage.py runscript delete
+
 import os
 import json
 
@@ -12,6 +12,7 @@ from games.models import Game, GameList, Comment
 
 
 def run(*args, **options):
+	print('Delete data...Hang on...')
 	GameList.objects.all().delete()
 	Comment.objects.all().delete()
 	Game.objects.all().delete()

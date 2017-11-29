@@ -25,7 +25,7 @@ SECRET_KEY = '^8%yo6a3gpuh%7e29(p$x^y=-&78ne4gu%%2_@2^3w4*wyt(cs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -123,7 +123,7 @@ WSGI_APPLICATION = 'goodgames.wsgi.application'
 #     }
 # }
 
-if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+if os.getenv('GAE_INSTANCE'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -138,23 +138,17 @@ else:
     # Running locally so connect to either a local MySQL instance or connect to
     # Cloud SQL via the proxy. To start the proxy via command line:
     #
-    #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306
+    #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:5432
     #
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #         'NAME': os.environ.get("POSTGRES_NAME", 'postgres'),  # noqa: ignore=F405
-    #         'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
-    #         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
-    #         'HOST': os.environ.get("POSTGRES_HOST", 'localhost'),  # noqa: ignore=F405
-    #         'PORT': os.environ.get("POSTGRES_PORT", 5432),  # noqa: ignore=F405
-    #     }
-    # }
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get("POSTGRES_NAME", 'test'),  # noqa: ignore=F405
+            'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
+            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
+            'HOST': os.environ.get("POSTGRES_HOST", 'localhost'),  # noqa: ignore=F405
+            'PORT': os.environ.get("POSTGRES_PORT", 5432),  # noqa: ignore=F405
         }
     }
 # [END db_setup]
@@ -194,16 +188,20 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = False
+USE_I18N = True
 
-USE_L10N = False
+USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+if os.getenv('GAE_INSTANCE'):
+    STATIC_URL = 'https://storage.googleapis.com/goodgames-185922/static/'
+else:
+    STATIC_URL = '/static/'
 
-STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
 
 SITE_ID = 1
