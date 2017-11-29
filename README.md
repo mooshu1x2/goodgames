@@ -1,81 +1,39 @@
-# GoodGames
+GoodGames
+=========
 GoodGames is a social service to allow gamers to curate their list of games and 
 see what their friends are playing, agnostic of console/pc platforms. 
 
-## Development Notes
+Deployment Options
+------------------
+* Deploy GoodGames in Development Environment
+* Deploy GoodGames to the Google App Engine Flexible Environment
+* Deploy GoodGames with Docker
 
-1. Connect to Google Cloud DB using Cloud SQL Proxy
-```bash
-./cloud_sql_proxy -instances="[YOUR_INSTANCE_CONNECTION_NAME]"=tcp:5432
-```
+If you do not have a Google Cloud account and just want to simply deploy
+GoodGames, use Docker.
 
-1. Setup development environment
-```bash
-virtualenv env
-source env/bin/activate
-pip install -r requirements/requirements-vendor.txt -t lib/
-pip install -r requirements/requirements.txt
-```
+Using Docker
+------------
+1. Install [Docker] on your machine.
 
-1. Setup Django
-```bash
-python goodgames/manage.py makemigrations
-python goodgames/manage.py migrate
-# Populate database with 20 games and reviews
-python goodgames/manage.py seed
-```
+1. Install [docker-compose].
+   
+   ```bash
+   $ pip install docker-compose
+   ```
+   
+1. Build and run the [Docker] containers. This might take a while. 
+   You should be able to access GoodGames at localhost:8888. The backend
+   is served on localhost:8000.
 
-1. To delete data from database
-```bash
-python goodgames/manage.py runscript delete
-```
+   ```bash
+   docker-compose -f docker-compose.dev.yml up -d --build
+   ```
+ 
+## The Team
 
-1. Start local webserver
-```bash
-python manage.py runserver
-```
+GoodGames is currently maintained by [Michelle Beard](https://www.linkedin.com/in/michelle-b-3756a815/).
 
-1. In your web browser, enter
-```bash
-http://localhost:8000
-```
-
-## Deploy the app to the App Engine flexible environment
-
-1. Make sure gcloud is in your PATH
-```bash
-source ~/Applications/google-cloud-sdk/completion.bash.inc
-source ~/Applications/google-cloud-sdk/path.bash.inc
-```
-
-1. When the app is deployed to Cloud Platform, it uses the Gunicorn server. Gunicorn doesn't serve static content, so the app uses Google Cloud Storage to serve static content.
-Create a Cloud Storage bucket and make it publically readable.
-Replace <your-gcs-bucket> with a bucket name of your choice. For example, you 
-could use your project ID as a bucket name:
-
-```bash
-gsutil mb gs://goodgames-185922
-gsutil defacl set public-read gs://goodgames-185922
-```
-
-1. Gather all the static content locally into one folder:
-
-```bash
-python manage.py collectstatic
-```
-1. Upload the static content to CloudStorage:
-
-```bash
-gsutil rsync -R static/ gs://goodgames-185922/static
-```
-
-1. Deploy
-```bash
-gcloud app deploy
-```
-
-1. Visit [GoodGames](https://goodgames-185922.appspot.com)
-
-```bash
-https://goodgames-185922.appspot.com
-```
+[Docker]: http://docker.com
+[docker-compose]: https://docs.docker.com/compose/install
+[virtualenv]: https://virtualenv.pypa.io/
