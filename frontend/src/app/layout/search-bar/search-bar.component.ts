@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Http, Response } from '@angular/http';
 
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -15,14 +14,13 @@ export class SearchBarComponent implements OnInit {
   api_url = environment.api_url + '/games/choices';
   data: any = {};
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     this.getChoices();
     this.getData();
   }
 
   getData() {
-    return this.http.get(this.api_url)
-      .map((res) => res.json());
+    return this.http.get(this.api_url);
   }
 
   getChoices() {
@@ -32,7 +30,6 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }

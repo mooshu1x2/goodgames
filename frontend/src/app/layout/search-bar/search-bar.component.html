@@ -1,48 +1,48 @@
 <div class="container">
-    <div class="section">
-  <div class="row">
-    <h5 class="center">Search and browse games</h5>
+  <div class="section">
+    <div class="row">
+      <h5 class="center">Search and browse games</h5>
 
-    <div class="col s12 m6 offset-m3 ">
-      <form>
-        <div class="input-field">
-          <input id="search" type="search">
-          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-          <i class="material-icons">close</i>
-        </div>
-      </form>
+      <div class="col s12 m6 offset-m3 ">
+        <form>
+          <div class="input-field">
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <input id="search" type="search">
+            <i class="material-icons">close</i>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
+    <div class="row">
 
-    <!-- Show all genres and console types -->
-    <div class="col s12 m3">
-      <h5 class="center">Genres</h5>
-      <ul class="wrap">
-        <ng-container *ngFor="let genre of data.genres">
-          <li><a href="#{{ genre.id }}">{{ genre.value }}</a></li>
-        </ng-container>
-      </ul>
-    </div>
-    <div class="col s12 m6">
-      <h5 class="center">Platforms</h5>
-      <ul class="wrap">
-        <ng-container *ngFor="let platform of data.platforms">
-          <li><a href="#{{ platform.id }}">{{ platform.value }}</a></li>
-        </ng-container>
-      </ul>
-    </div>
-    <div class="col s12 m3">
-      <h5 class="center">ESRB</h5>
-      <ul class="wrap">
-        <ng-container *ngFor="let rating of data.ratings">
-          <li><a href="#{{ rating.id }}">{{ rating.value }}</a></li>
-        </ng-container>
-      </ul>
+      <!-- Show all genres and console types -->
+      <div class="col s12 m3">
+        <h5 class="center">Genres</h5>
+        <ul class="wrap">
+          <ng-container *ngFor="let genre of data.genres">
+            <li><a href="/genre/{{ genre.id }}">{{ genre.value }}</a></li>
+          </ng-container>
+        </ul>
+      </div>
+      <div class="col s12 m6">
+        <h5 class="center">Platforms</h5>
+        <ul class="wrap">
+          <ng-container *ngFor="let platform of data.platforms">
+            <li><a href="/platform/{{ platform.id }}">{{ platform.value }}</a></li>
+          </ng-container>
+        </ul>
+      </div>
+      <div class="col s12 m3">
+        <h5 class="center">ESRB</h5>
+        <ul class="wrap">
+          <ng-container *ngFor="let rating of data.ratings">
+            <li><a href="/rating/{{ rating.id }}">{{ rating.value }}</a></li>
+          </ng-container>
+        </ul>
+      </div>
+
     </div>
 
   </div>
 </div>
-
-
