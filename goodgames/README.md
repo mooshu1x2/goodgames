@@ -54,10 +54,10 @@ Deploy GoodGames in Development Environment with Cloud SQL
 ----------------------------------------------------------
 1. Install Google Cloud SQL Proxy to proxy your PostgreSQL database. 
 
-1. Connect to Google Cloud DB using Cloud SQL Proxy
+1. Connect to Google Cloud DB using [Cloud SQL Proxy].
 
     ```bash
-    ./cloud_sql_proxy -instances="[YOUR_INSTANCE_CONNECTION_NAME]"=tcp:5432
+    ./cloud_sql_proxy -instances="[INSTANCE_CONNECTION_NAME]"=tcp:5432
     ```
 
 1. Setup development environment
@@ -113,8 +113,8 @@ Deploy GoodGames to the Google App Engine Flexible Environment
 Create a Cloud Storage bucket and make it publically readable. Replace <your-gcs-bucket> with a bucket name of your choice. For example, you could use your project ID as a bucket name:
 
     ```bash
-    gsutil mb gs://goodgames-185922
-    gsutil defacl set public-read gs://goodgames-185922
+    gsutil mb gs://[YOUR_INSTANCE_CONNECTION_NAME]
+    gsutil defacl set public-read gs://[YOUR_INSTANCE_CONNECTION_NAME]
     ```
 
 1. Gather all the static content locally into one folder:
@@ -126,7 +126,7 @@ Create a Cloud Storage bucket and make it publically readable. Replace <your-gcs
 1. Upload the static content to CloudStorage:
 
     ```bash
-    gsutil rsync -R static/ gs://goodgames-185922/static
+    gsutil rsync -R static/ gs://[YOUR_INSTANCE_CONNECTION_NAME]/static
     ```
 
 1. Deploy
@@ -148,3 +148,4 @@ Create a Cloud Storage bucket and make it publically readable. Replace <your-gcs
 [postgresql]: http://www.postgresql.org/download/
 [http://127.0.0.1:8888]: http://127.0.0.1:8888
 [http://127.0.0.1:8000]: http://127.0.0.1:8000
+[Cloud SQL Proxy]: https://cloud.google.com/appengine/docs/flexible/python/using-cloud-sql-postgres

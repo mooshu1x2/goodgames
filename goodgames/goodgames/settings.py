@@ -53,7 +53,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     # include providers you want to enable
     'allauth.socialaccount.providers.google',
-    # 'corsheaders',
+    'corsheaders',
     'import_export',
     'rest_auth',
     'rest_auth.registration',
@@ -67,6 +67,7 @@ THIRD_PARTY_APPS = [
 INSTALLED_APPS = DEFAULT_APPS + OUR_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -112,16 +113,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'goodgames.wsgi.application'
 
+# CORS Settings
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 if os.getenv('GAE_INSTANCE'):
     DATABASES = {
@@ -135,7 +131,7 @@ if os.getenv('GAE_INSTANCE'):
         }
     }
 else:
-    # Running locally so connect to either a local MySQL instance or connect to
+    # Running locally so connect to either a local PostGreSQL instance or connect to
     # Cloud SQL via the proxy. To start the proxy via command line:
     #
     #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:5432
