@@ -37,6 +37,8 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 
+    url(r'^api/accounts/', include('allauth.urls')),
+
     url(r'^api/games/', include('games.urls', namespace='games')),
     url(r'^api/web/',  include('web.urls', namespace='web')),
 ]

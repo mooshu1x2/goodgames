@@ -192,7 +192,8 @@ class Comment(TimeStampedModel):
 	description = models.CharField(max_length=1024)
 	is_critic = models.BooleanField(default=False)
 	is_user = models.BooleanField(default=False)
-
+	sentiment_score = models.DecimalField(decimal_places=4, max_digits=6, null=True, blank=True)
+	sentiment_magnitude = models.DecimalField(decimal_places=4, max_digits=6, null=True, blank=True)
 	game = models.ForeignKey(Game)
 
 	def __unicode__(self):

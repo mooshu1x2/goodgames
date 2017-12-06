@@ -10,6 +10,11 @@ from django.core.management.base import BaseCommand
 
 from games.models import Game, GameList, Comment
 
+# Imports the Google Cloud client library
+from google.cloud import language
+from google.cloud.language import enums
+from google.cloud.language import types
+
 
 def create_user(is_admin, username=""):
 	"""
@@ -33,7 +38,8 @@ def create_user(is_admin, username=""):
 		"Super user" if is_admin else "User", username))
 	return user
 
-def create_game():
+
+def create_game(client):
 	"""
 	Create games from curated list, including comments
 	"""
@@ -70,22 +76,48 @@ def create_game():
 		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), d['name']))
 		for c in critic_reviews:
 			# Quick and dirty way to restrict length of comment to 1024 characters
+			desc = c[:1024] if len(c) > 1024 else c
+			desc = desc.encode('ascii', 'ignore')
+			document = types.Document(content=desc, type=enums.Document.Type.PLAIN_TEXT)
+
+			# Detects the sentiment of the text
+			sentiment = client.analyze_sentiment(document=document).document_sentiment
+			print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
+
 			comment = Comment.objects.create(
 					game=game,
-					description=c[:1024] if len(c) > 1024 else c,
+					description=desc,
 					is_critic=True,
 					is_user=False,
+					sentiment_score=format(sentiment.score, '.3f'),
+					sentiment_magnitude=format(sentiment.magnitude, '.3f'),
 			)
 
 		user_reviews = d['user_reviews']
 		print("Creating {} user reviews for game {}...".format(len(user_reviews), d['name']))
 		for u in user_reviews:
+			# Quick and dirty way to restrict length of comment to 1024
+			# characters
+			desc = u[:1024] if len(u) > 1024 else u
+			desc = desc.encode('ascii', 'ignore')
+
+			document = types.Document(content=desc,
+			                          type=enums.Document.Type.PLAIN_TEXT)
+
+			# Detects the sentiment of the text
+			sentiment = client.analyze_sentiment(document=document).document_sentiment
+			print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
+
 			comment = Comment.objects.create(
 					game=game,
-					description=u[:1024] if len(u) > 1024 else u,
+					description=desc,
 					is_critic=False,
 					is_user=True,
+					sentiment_score=format(sentiment.score, '.3f'),
+					sentiment_magnitude=format(sentiment.magnitude, '.3f'),
 			)
+
+
 
 def run(*args, **options):
 	# Create superuser
@@ -95,4 +127,6 @@ def run(*args, **options):
 	participant_user = create_user(is_admin=False, username="participant")
 
 	# Create curated list of games from data file
-	create_game()
+	# Instantiates a client
+	client = language.LanguageServiceClient()
+	create_game(client)

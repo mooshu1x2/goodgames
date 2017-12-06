@@ -52,7 +52,7 @@ Follow this guide to setup your development machine.
     
 Deploy GoodGames in Development Environment with Cloud SQL
 ----------------------------------------------------------
-1. Install Google Cloud SQL Proxy to proxy your PostgreSQL database. 
+1. Install [Cloud SQL Proxy] to proxy your PostgreSQL database. 
 
 1. Connect to Google Cloud DB using [Cloud SQL Proxy].
 
@@ -140,6 +140,9 @@ Create a Cloud Storage bucket and make it publically readable. Replace <your-gcs
     ```bash
     https://goodgames-185922.appspot.com
     ```
+Deploy GoodGames to the Google Compute Engine
+---------------------------------------------
+1. 
 
 [GoodGames]: https://goodgames-185922.appspot.com
 [python]: https://www.python.org/download/releases/2.7/
@@ -148,4 +151,4 @@ Create a Cloud Storage bucket and make it publically readable. Replace <your-gcs
 [postgresql]: http://www.postgresql.org/download/
 [http://127.0.0.1:8888]: http://127.0.0.1:8888
 [http://127.0.0.1:8000]: http://127.0.0.1:8000
-[Cloud SQL Proxy]: https://cloud.google.com/appengine/docs/flexible/python/using-cloud-sql-postgres
+[Cloud SQL Proxy]: https://cloud.google.com/appengine/docs/flexible/python/using-cloud-sql-postgres#setting_up_your_local_environment

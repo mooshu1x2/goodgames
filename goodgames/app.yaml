@@ -8,6 +8,7 @@ beta_settings:
 
 skip_files:
 - scripts/
+- static/
 
 runtime_config:
   python_version: 2
