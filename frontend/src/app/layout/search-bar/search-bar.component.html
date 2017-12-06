@@ -21,7 +21,7 @@
         <h5 class="center">Genres</h5>
         <ul class="wrap">
           <ng-container *ngFor="let genre of data.genres">
-            <li><a href="/genre/{{ genre.id }}">{{ genre.value }}</a></li>
+            <li><a href="/search?genre={{ genre.id }}">{{ genre.value }}</a></li>
           </ng-container>
         </ul>
       </div>
@@ -29,7 +29,7 @@
         <h5 class="center">Platforms</h5>
         <ul class="wrap">
           <ng-container *ngFor="let platform of data.platforms">
-            <li><a href="/platform/{{ platform.id }}">{{ platform.value }}</a></li>
+            <li><a href="/search?platform={{platform.id}}">{{platform.value}}</a></li>
           </ng-container>
         </ul>
       </div>
@@ -37,7 +37,7 @@
         <h5 class="center">ESRB</h5>
         <ul class="wrap">
           <ng-container *ngFor="let rating of data.ratings">
-            <li><a href="/rating/{{ rating.id }}">{{ rating.value }}</a></li>
+            <li><a href="/search?rating={{ rating.id }}">{{ rating.value }}</a></li>
           </ng-container>
         </ul>
       </div>

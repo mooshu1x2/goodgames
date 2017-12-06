@@ -1,0 +1,30 @@
+<section>
+  <div class="row">
+    <div class="col s6">
+      <h3 class="center light red-text text-lighten-2">User Reviews</h3>
+      <div *ngIf="user_review">
+
+        <div class="card-panel">
+          <div class="col m1">
+            <span class="badge green">100</span>
+          </div>
+          <span class="black-text">{{ user_review.desc || "This is a comment"}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s6">
+      <h3 class="center light red-text text-lighten-2">Critic Reviews</h3>
+      <div *ngIf="critic_review">
+        <div class="card-panel">
+          <div class="col m1">
+            <span class="badge green">100</span>
+          </div>
+          <span class="black-text">{{ critic_review.desc || "This is a comment"}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</section>

@@ -1,15 +1,22 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
+import {LayoutRoutingModule} from './layout-routing.module';
+
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { SplashComponent } from './splash/splash.component';
+import { MaterializeModule } from 'angular2-materialize';
 
+import { LoginComponent } from '../auth/login/login.component';
+import { GameService} from '../games/shared/game.service';
 
 @NgModule({
   imports: [
     CommonModule,
+    LayoutRoutingModule,
+    MaterializeModule,
   ],
   exports: [
     FooterComponent,
@@ -24,6 +31,7 @@ import { SplashComponent } from './splash/splash.component';
     SearchBarComponent,
   ],
   providers: [
+    GameService
   ]
 })
 

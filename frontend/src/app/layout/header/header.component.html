@@ -1,14 +1,27 @@
 <header>
 
-  <ul id="dropdown1" class="dropdown-content">
-    <li><a href="/login">Login</a></li>
-  </ul>
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal bottom-sheet" materialize="modal"
+       [materializeParams]="[{dismissible: false}]"
+       [materializeActions]="modalActions">
+
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a class="waves-effect waves-green btn-flat" (click)="closeModal()">Close</a>
+      <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
 
   <nav class="blue lighten-2" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">{{ title }}</a>
+
+
+      <!-- Login -->
       <ul class="right hide-on-med-and-down">
-        <!-- Dropdown Trigger -->
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Login<i class="material-icons right">arrow_drop_down</i></a></li>
+        <a class="waves-effect waves-light btn modal-trigger" (click)="openModal()">Login</a>
       </ul>
 
     </div>

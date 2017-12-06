@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api_url: 'http://goodgames-185922.appspot.com/api',
+  api_url: 'https://goodgames-185922.appspot.com/api',
 };

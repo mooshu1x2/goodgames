@@ -5,26 +5,26 @@ import { HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { GamesComponent } from './games/games.component';
+import {GameTopComponent} from './games/game-top/game-top.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-import { SearchComponent } from './games/search/search.component';
 
 import { LayoutModule } from './layout/layout.module';
 import { AuthModule } from './auth/auth.module';
-import { GameComponent } from './game/game.component';
-import { CommentsComponent } from './game/comments/comments.component';
+
 import { TeamComponent } from './team/team.component';
+import {GameSearchComponent} from './search/game-search.component';
+import {GameResultsComponent} from './search/game-results/game-results.component';
+import { MaterializeModule } from 'angular2-materialize';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GamesComponent,
+    GameTopComponent,
     HomeComponent,
     ProfileComponent,
-    SearchComponent,
-    GameComponent,
-    CommentsComponent,
+    GameSearchComponent,
+    GameResultsComponent,
     TeamComponent,
   ],
   imports: [
@@ -33,6 +33,7 @@ import { TeamComponent } from './team/team.component';
     AppRoutingModule,
     LayoutModule,
     AuthModule,
+    MaterializeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

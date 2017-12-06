@@ -11,12 +11,10 @@ import { environment } from '../../../environments/environment';
 })
 export class SearchBarComponent implements OnInit {
 
-  api_url = environment.api_url + '/games/choices';
+  api_url = environment.api_url + '/games/choices/';
   data: any = {};
 
   constructor(private http: HttpClient) {
-    this.getChoices();
-    this.getData();
   }
 
   getData() {
@@ -30,6 +28,9 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getChoices();
+    this.getData();
+  }
 
 }

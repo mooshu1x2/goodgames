@@ -1,0 +1,58 @@
+<app-header></app-header>
+
+<div class="section">
+  <div *ngIf="game">
+
+    <div class="row">
+
+      <h3 class="center">{{ game.title }}</h3>
+      <h4 class="center light black-text text-lighten-2">{{ game.platform }}</h4>
+    </div>
+
+    <div class="row">
+
+      <div class="col s6">
+
+        <!-- Game Title/Name + Image -->
+        <div class="row">
+          <img class="responsive-img"
+               src="https://d50m6q67g4bn3.cloudfront.net/teams_avatars/51f79653-c4c9-497a-a27d-39f5f1067b38_1450369795410">
+        </div>
+
+      </div>
+
+      <div class="col s6">
+        <!-- Game MetaData -->
+        <div class="row">
+          <p>Developer: {{ game.developer }}</p>
+        </div>
+        <div class="row">
+          <p>Genre: {{ game.genre }}</p>
+        </div>
+        <div class="row">
+          <p>Rating: {{ game.rating }}</p>
+        </div>
+        <div class="row">
+          <p>Critic Score: {{ game.critic_score }}/100</p>
+        </div>
+        <div class="row">
+          <p>User Score: {{ game.user_score }}</p>
+        </div>
+        <div class="row">
+          <p>Overall Sentiment: {{ game.sentiment || 0}}</p>
+        </div>
+        <div class="row">
+          <p>Sentiment Magnitude: {{ game.magnitude || 0 }} </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<app-game-reviews></app-game-reviews>
+
+<app-footer></app-footer>

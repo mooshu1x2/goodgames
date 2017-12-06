@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="section">
+    <div class="row">
+      <!-- Dropdown Structure -->
+      <ul id='dropdown1' class='dropdown-content'>
+        <li><a href="#!">Want to Play</a></li>
+        <li><a href="#!">Have Played</a></li>
+      </ul>
+
+      <div class="col s12 m12">
+          <table class="striped highlight">
+            <thead>
+            <tr>
+              <th>Cover</th>
+              <th>Title</th>
+              <th>Developer</th>
+              <th>Publisher</th>
+              <th>Platform</th>
+              <th>Score</th>
+              <th>Genre</th>
+              <th>Release Date</th>
+              <th>Add Me</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let game of games">
+                <td><i class="fa fa-twitch" aria-hidden="true"></i></td>
+                <td><a routerLink="/games/{{game.id}}">{{game.title}}</a></td>
+                <td>{{game.developer}}</td>
+                <td>{{game.publisher}}</td>
+                <td>{{game.platform}}</td>
+                <td>{{game.critic_score || 0}}/100</td>
+                <td>{{game.genre}}</td>
+                <td>{{game.release_date}}</td>
+                <td><a class='dropdown-button btn' href='#' data-activates='dropdown1'>Pick Me!</a></td>
+                <!--<td><button class="add" title="add game"-->
+                            <!--(click)="add(game)">x</button></td>-->
+                <td><button class="delete" title="delete game"
+                            (click)="delete(game)">x</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+      <div class="col s12 m8 offset-m4">
+        <ul class="pagination">
+          <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+          <li class="active"><a href="#!">1</a></li>
+          <li class="waves-effect"><a href="#!">2</a></li>
+          <li class="waves-effect"><a href="#!">3</a></li>
+          <li class="waves-effect"><a href="#!">4</a></li>
+          <li class="waves-effect"><a href="#!">5</a></li>
+          <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+      </div>
+
+
+    </div>
+  </div>
+</div>
