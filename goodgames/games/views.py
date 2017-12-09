@@ -42,7 +42,7 @@ def get_all_games(request):
 
 @throttle_classes([UserRateThrottle])
 @api_view(['GET'])
-def get_all_comments(request, pk, review):
+def get_all_comments(request, pk, review = ''):
 	if request.method == 'GET':
 		fields = {'critic': 'is_critic', 'user': 'is_user'}
 		options = {}
@@ -55,7 +55,12 @@ def get_all_comments(request, pk, review):
 				serialize = CommentSerializer(c)
 				results.append(serialize.data)
 			return Response(results, status=status.HTTP_200_OK)
-		return Response({}, status=status.HTTP_200_OK)
+		else:
+			comments = Comment.objects.filter(game=pk)
+			comments = [CommentSerializer(ob).data for ob in
+			            comments]
+
+			return Response(comments, status=status.HTTP_200_OK)
 
 @throttle_classes([UserRateThrottle])
 @api_view(['GET', 'POST'])
@@ -123,6 +128,7 @@ def filterBy(request, type, choice):
 			return Response(results, status=status.HTTP_200_OK)
 		return Response({}, status=status.HTTP_200_OK)
 
+
 @throttle_classes([UserRateThrottle])
 @api_view(['GET'])
 def searchBy(request, q):
@@ -130,4 +136,34 @@ def searchBy(request, q):
 		query_list = q.split()
 		result = Game.objects.filter(reduce(operator.or_, (Q(title__icontains=i) for i in query_list)))
 		results = [GameSerializer(ob).data for ob in result]
+		return Response(results, status=status.HTTP_200_OK)
+
+
+@throttle_classes([UserRateThrottle])
+@api_view(['GET'])
+def sentiment(request, pk):
+	if request.method == 'GET':
+		# @todo, push to queue first
+		# @todo, cache results
+
+		comments = Comment.objects.filter(game=pk)
+		comments = [CommentSerializer(ob).data['description'] for ob in comments]
+
+		# Just need to capture overall sentiment
+		comment_str = ''
+		for c in comments:
+			comment_str += c
+
+		# Instantiates a client
+		client = language.LanguageServiceClient()
+		document = types.Document(content=comment_str,
+		                          type=enums.Document.Type.PLAIN_TEXT)
+
+		# Detects the sentiment of the text
+		sentiment = client.analyze_sentiment(document=document).document_sentiment
+
+		results = {
+			'sentiment': sentiment.score,
+			'magnitude': sentiment.magnitude
+		}
 		return Response(results, status=status.HTTP_200_OK)

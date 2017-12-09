@@ -1,11 +1,8 @@
-import {Component, OnInit, ViewEncapsulation, ViewChild, Input, Output} from '@angular/core';
-import {GameService} from '../../shared/game.service';
-import {MaterializeDirective} from "angular2-materialize";
-
-import {Game, Comment} from '../../shared/game';
-
+import {Component, OnInit, ViewEncapsulation, Output} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import { RouterModule, Router } from '@angular/router';
+
+import {GameService} from '../../shared/game.service';
+import {Comment} from '../../shared/game';
 
 @Component({
   selector: 'app-game-reviews',
@@ -14,9 +11,9 @@ import { RouterModule, Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None
 })
 export class GameReviewsComponent implements OnInit {
-  @Input() comment: Comment;
-  @Output() user_review: boolean;
-  @Output() critic_review: boolean;
+  @Output() comments: Comment;
+  // @Output() user_review: boolean;
+  // @Output() critic_review: boolean;
   constructor(private gameService: GameService,
               private route: ActivatedRoute) { }
 
@@ -28,8 +25,10 @@ export class GameReviewsComponent implements OnInit {
     this.route.params.subscribe((params: any) => {
       if (params['id']) {
         const id = params['id'];
-        const type = params['type'];
-        this.gameService.getGameComments(id, type).subscribe((comment => this.comment = comment));
+        // const type = params['type'];
+        this.gameService.getGameComments(id).subscribe((comments => this.comments = comments));
+        console.log('Comments = ');
+        console.log(this.comments);
       }
     });
   }

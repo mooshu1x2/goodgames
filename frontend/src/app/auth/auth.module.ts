@@ -5,11 +5,13 @@ import {LayoutModule} from '../layout/layout.module';
 
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { MaterializeModule } from 'angular2-materialize';
 
 @NgModule({
   imports: [
     CommonModule,
     LayoutModule,
+    MaterializeModule,
   ],
   exports: [
     LoginComponent,

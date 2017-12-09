@@ -6,19 +6,13 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import {Game, Comment} from './game';
+import {Game} from './game';
 
 @Injectable()
 export class GameService {
   private headers: HttpHeaders;
   private gamesUrl: string;
 
-  // private handleError(operation = 'operation', error: any) {
-  //   if (error instanceof Error) {
-  //     console.log('An error occurred:', error.message);
-  //   }
-  //   console.log(`Backend returned code ${error.status}, body was: ${error.message}`);
-  // }
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -61,9 +55,9 @@ export class GameService {
    * @returns {Subscription}
    */
   getGameById(gameId: number): Observable<Game> {
-    return this.http.get<Game>(this.gamesUrl + gameId).pipe(
+    return this.http.get<Game>(this.gamesUrl + '/' + gameId).pipe(
       tap(_ => console.log(`fetched game id=${gameId}`)),
-      catchError(this.handleError<Game>(`getHero id=${gameId}`))
+      catchError(this.handleError<Game>(`getGame id=${gameId}`))
     );
   }
 
@@ -73,10 +67,8 @@ export class GameService {
    * @param {string} type
    * @returns {Subscription}
    */
-  getGameComments(gameId: number, type: string) {
-    // const url = `${this.gamesUrl}/${gameId}/reviews/${type}/`;
-    const url = `${this.gamesUrl}${gameId}/reviews/critic`;
-
+  getGameComments(gameId: number) {
+    const url = `${this.gamesUrl}/${gameId}/reviews`;
     return this.http.get<any>(url).pipe(
       tap(comments => console.log(`fetched game comments id=${gameId}`)),
       catchError(this.handleError<Game>(`getGameComments id=${gameId}`))
@@ -127,4 +119,17 @@ export class GameService {
       catchError(this.handleError<Game[]>('filterGames', []))
     );
   }
+
+  /**
+   * Analyze game comments
+   * @param {number} pk
+   * @returns {Observable<any>}
+   */
+  analyze(pk: number) {
+    const url = `${this.gamesUrl}/games/sentiment/${pk}`;
+    return this.http.get(url).pipe(
+      tap(sentiment => console.log(`found sentiment matching "${pk}"`)),
+      catchError(this.handleError('analyze', [])))
+  };
+
 }

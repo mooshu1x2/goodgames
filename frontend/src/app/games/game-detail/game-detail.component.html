@@ -1,27 +1,31 @@
 <app-header></app-header>
 
-<div class="section">
+<div class="container">
+
   <div *ngIf="game">
 
-    <div class="row">
-
-      <h3 class="center">{{ game.title }}</h3>
-      <h4 class="center light black-text text-lighten-2">{{ game.platform }}</h4>
-    </div>
+    <h3 class="center">{{ game.title }}</h3>
+    <h4 class="center light black-text text-lighten-2">{{ game.platform }}</h4>
 
     <div class="row">
 
-      <div class="col s6">
+      <div class="col s4">
 
         <!-- Game Title/Name + Image -->
-        <div class="row">
-          <img class="responsive-img"
-               src="https://d50m6q67g4bn3.cloudfront.net/teams_avatars/51f79653-c4c9-497a-a27d-39f5f1067b38_1450369795410">
-        </div>
+        <img class="responsive-img"
+             src="https://d50m6q67g4bn3.cloudfront.net/teams_avatars/51f79653-c4c9-497a-a27d-39f5f1067b38_1450369795410">
 
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce bibendum ante eget gravida porta.
+          Nunc dapibus iaculis vulputate. Proin ac hendrerit turpis. Nunc pharetra, enim vitae luctus vehicula, ipsum
+          lacus feugiat elit, accumsan pellentesque libero est quis est. Nam sit amet ex pretium, tincidunt risus sed,
+          ultricies risus. Sed ac sem ipsum. Proin luctus ligula eget lacinia condimentum. Maecenas tempus purus quis
+          varius pulvinar. Phasellus fermentum vehicula tempus. Nunc rhoncus elit sit amet erat sagittis consequat.
+          Cras in metus interdum, faucibus libero ut, eleifend nisl. Vivamus vel condimentum urna. Mauris pellentesque
+          fermentum lacus nec facilisis.</p>
       </div>
 
-      <div class="col s6">
+
+      <div class="col s8">
         <!-- Game MetaData -->
         <div class="row">
           <p>Developer: {{ game.developer }}</p>
@@ -38,17 +42,20 @@
         <div class="row">
           <p>User Score: {{ game.user_score }}</p>
         </div>
-        <div class="row">
-          <p>Overall Sentiment: {{ game.sentiment || 0}}</p>
-        </div>
-        <div class="row">
-          <p>Sentiment Magnitude: {{ game.magnitude || 0 }} </p>
+        <div *ngIf="sentiment">
+          <div class="row">
+            <p>Overall Sentiment: {{ sentiment.sentiment || 0}}</p>
+          </div>
+          <div class="row">
+            <p>Sentiment Magnitude: {{ sentiment.magnitude || 0 }} </p>
+          </div>
         </div>
       </div>
 
     </div>
 
   </div>
+
 </div>
 
 <div class="divider"></div>

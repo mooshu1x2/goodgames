@@ -12,72 +12,80 @@
       <div class="row center">
 
 
-        <button class="loginBtn loginBtn--google" (click)="login('google')">
-          Login with Google
-        </button>
+        <!--<button class="loginBtn loginBtn&#45;&#45;google" (click)="login('google')">-->
+          <!--Login with Google-->
+        <!--</button>-->
 
-        <!--<google-signin-->
-          <!--[clientId]="googleClientId"-->
-          <!--[width]="myWidth"-->
-          <!--[theme]="myTheme"-->
-          <!--[scope]="myScope"-->
-          <!--[longTitle]="myLongTitle"-->
-          <!--(googleSignInSuccess)="onGoogleSignInSuccess($event)">-->
-        <!--</google-signin>-->
+        <google-signin
+        [clientId]="googleClientId"
+        [width]="myWidth"
+        [theme]="myTheme"
+        [scope]="myScope"
+        [longTitle]="myLongTitle"
+        (googleSignInSuccess)="onGoogleSignInSuccess($event)">
+        </google-signin>
 
-        <button class="loginBtn loginBtn--facebook" (click)="login('facebook')">
-          Login with Facebook
-        </button>
+        <!--<button class="loginBtn loginBtn&#45;&#45;facebook" (click)="login('facebook')">-->
+          <!--Login with Facebook-->
+        <!--</button>-->
 
       </div>
 
-      <hr>
-      <br>
+      <!--<hr>-->
+      <!--<br>-->
 
       <!-- Custom Auth -->
-      <form class="col s12">
+      <!--<form class="col s12">-->
 
-        <div class="row">
-          <div class="input-field col s12">
-            <input placeholder="Username*" id="user_name" type="text" class="validate">
-            <label for="user_name">Username</label>
-          </div>
-        </div>
+        <!--<div class="row">-->
+          <!--<div class="input-field col s12">-->
+            <!--<input placeholder="Username*" id="user_name" type="text" class="validate">-->
+            <!--<label for="user_name">Username</label>-->
+          <!--</div>-->
+        <!--</div>-->
 
-        <div class="row">
-          <div class="input-field col s12">
-            <input placeholder="Password (min 8 characters)*" id="password" type="password" class="validate">
-            <label for="password">Password</label>
-          </div>
-        </div>
+        <!--<div class="row">-->
+          <!--<div class="input-field col s12">-->
+            <!--<input placeholder="Password (min 8 characters)*" id="password" type="password" class="validate">-->
+            <!--<label for="password">Password</label>-->
+          <!--</div>-->
+        <!--</div>-->
 
-        <div class="row">
-          <div class="col s6">
-            <button class="btn waves-effect waves-light disabled" type="submit" name="action">Login
-              <i class="material-icons right">send</i>
-            </button>
-          </div>
+        <!--<div class="row">-->
+          <!--<div class="col s6">-->
+            <!--<button class="btn waves-effect waves-light disabled" type="submit" name="action">Login-->
+              <!--<i class="material-icons right">send</i>-->
+            <!--</button>-->
+          <!--</div>-->
 
-          <div class="col s6">
-            <a class="disabled">Forgot Password?</a>
-          </div>
-        </div>
+          <!--<div class="col s6">-->
+            <!--<a class="disabled">Forgot Password?</a>-->
+          <!--</div>-->
+        <!--</div>-->
 
-      </form>
+      <!--</form>-->
 
     </div>
     <div class="modal-footer">
-      <a class="waves-effect waves-green btn-flat" (click)="closeModal()">Logout</a>
+      <a class="waves-effect waves-green btn-flat" (click)="closeModal()">Close</a>
     </div>
   </div>
 
   <nav class="blue lighten-2" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">{{ title }}</a>
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">{{ title }}</a>
 
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <!-- Login -->
+        <ng-template #login>
+          <!-- Need to keep the href around: https://github.com/InfomediaLtd/angular2-materialize/issues/335 -->
+          <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1" (click)="openModal()">Login</a></li>
+        </ng-template>
 
-      <!-- Login -->
-      <ul class="right hide-on-med-and-down">
-        <a class="waves-effect waves-light btn modal-trigger" (click)="openModal()">Login</a>
+        <li *ngIf="user; else login">
+          <a [routerLink]="['/profile', user.id]">Hi {{ user.first_name }}</a>
+        </li>
+
       </ul>
 
     </div>

@@ -4,9 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {LoginComponent} from './auth/login/login.component';
 import {HomeComponent} from './home/home.component';
 import {TeamComponent} from './team/team.component';
-// import {GameTopComponent} from './games/game-top/game-top.component';
 import {GameSearchComponent} from './search/game-search.component';
-import {GameResultsComponent} from './search/game-results/game-results.component';
 
 const routes: Routes = [
   {

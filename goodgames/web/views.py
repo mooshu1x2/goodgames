@@ -20,15 +20,9 @@ def home(request, template_name="index.html"):
     Home Page View
     """
     user = request.user
-    # print("I am user " + user)
+    print("I am user ", user)
 
     return render(request, template_name, {'profile': user})
-
-def fun_page(request, template_name="fun.html"):
-    """
-    Home Page View
-    """
-    return render(request, template_name)
 
 def page_not_found(request):
     response = render(request, 'error404.html',

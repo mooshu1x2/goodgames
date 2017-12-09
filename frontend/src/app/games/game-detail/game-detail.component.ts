@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Game} from '../shared/game';
@@ -11,7 +11,8 @@ import {GameService} from '../shared/game.service';
   encapsulation: ViewEncapsulation.None
 })
 export class GameDetailComponent implements OnInit{
-  @Input() game: Game;
+  @Output() game: Game;
+  @Output() sentiment: any;
 
   constructor(private gameService: GameService,
               private route: ActivatedRoute) { }
@@ -21,12 +22,13 @@ export class GameDetailComponent implements OnInit{
   }
 
   getGame(): void {
-    this.route.params.subscribe((params: any) => {
-      if (params['id']) {
-        const id = params['id'];
-        this.gameService.getGameById(id).subscribe((game => this.game = game));
-      }
-    });
+    this.route.params.subscribe(params => {
+        if (params['id']) {
+          const id = params['id'];
+          this.gameService.getGameById(id).subscribe((game => this.game = game));
+          this.gameService.analyze(id).subscribe((sentiment => this.sentiment = sentiment));
+        }
+      });
   }
 
   like(game: Game) {

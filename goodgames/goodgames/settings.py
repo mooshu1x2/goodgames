@@ -26,7 +26,10 @@ SECRET_KEY = '^8%yo6a3gpuh%7e29(p$x^y=-&78ne4gu%%2_@2^3w4*wyt(cs'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+CORS_ORIGIN_ALLOW_ALL = DEBUG
+CORS_ORIGIN_WHITELIST = ('localhost:4200',
+                         'https://goodgames-185922.firebaseapp.com')
+APPEND_SLASH = True
 
 # Application definition
 
@@ -48,20 +51,20 @@ OUR_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'corsheaders',
+    'import_export',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     # include providers you want to enable
     'allauth.socialaccount.providers.google',
-    'corsheaders',
-    'import_export',
+    'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
     'rest_auth',
     'rest_auth.registration',
-    'rest_framework.authtoken',
-    'rest_framework',
-    'rest_framework_swagger',
     # 'rest_framework_expiring_authtoken',
-    'django_extensions',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + OUR_APPS + THIRD_PARTY_APPS
@@ -79,7 +82,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'goodgames.urls'
 
-LOGIN_REDIRECT_URL = '/fun'
+LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = 'http://localhost:4200'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
@@ -90,8 +94,22 @@ SOCIALACCOUNT_PROVIDERS = {
             'email'
         ],
         'AUTH_PARAMS': { 'access_type': 'online' }
+    },
+    'facebook': {
+        'SCOPE': [
+            'email'
+        ]
     }
 }
+
+# SECRETS
+SOCIAL_AUTH_SECRETS = {
+    'google': {
+        'client_id': '319120036661-fm549dr67ad0du26i9t72s7s9fcj6moo.apps.googleusercontent.com',
+        'client_secret': 'qvHCu6wWEm1WvTMqrxhtcJQv',
+    }
+}
+
 
 TEMPLATES = [
     {
@@ -123,7 +141,7 @@ if os.getenv('GAE_INSTANCE'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("POSTGRES_NAME", 'postgres'),  # noqa: ignore=F405
+            'NAME': os.environ.get("POSTGRES_NAME", 'test'),  # noqa: ignore=F405
             'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
             'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
             'HOST': os.environ.get("POSTGRES_HOST", '/cloudsql/goodgames-185922:us-central1:goodgames-db'),  # noqa: ignore=F405
@@ -140,7 +158,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("POSTGRES_NAME", 'test'),  # noqa: ignore=F405
+            'NAME': os.environ.get("POSTGRES_NAME", 'goodgames-test'),  # noqa: ignore=F405
             'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
             'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
             'HOST': os.environ.get("POSTGRES_HOST", 'localhost'),  # noqa: ignore=F405
@@ -160,7 +178,7 @@ AUTHENTICATION_BACKENDS = (
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-3
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

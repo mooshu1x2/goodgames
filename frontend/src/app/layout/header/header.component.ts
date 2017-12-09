@@ -1,7 +1,9 @@
-import {Component, OnInit, ViewEncapsulation, AfterViewInit, EventEmitter} from '@angular/core';
-import {MaterializeDirective, MaterializeAction} from 'angular2-materialize';
+import {Component, OnInit, ViewEncapsulation, AfterViewInit, Output, EventEmitter} from '@angular/core';
 
+import {MaterializeAction} from 'angular2-materialize';
 import {GoogleSignInSuccess} from 'angular-google-signin';
+
+import { User} from '../../user/user';
 
 declare const gapi: any;
 
@@ -13,6 +15,7 @@ declare const gapi: any;
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit {
+  @Output() user: User;
   title = 'GoodGames';
   modalActions = new EventEmitter<string|MaterializeAction>();
 
@@ -40,13 +43,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   login(provider: string) {
-    console.log(provider);
-    // const auth2 = gapi.auth2.init({
-    //   client_id: this.googleClientId,
-    //   cookiepolicy: 'single_host_origin',
-    // });
-
-    // attach
   }
 
   onGoogleSignInSuccess(event: GoogleSignInSuccess) {
@@ -61,6 +57,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     console.log('ID Token: ' + googleUser.getAuthResponse().id_token);
     console.log('Access Token: ' + googleUser.getAuthResponse().access_token);
 
+    profile.getFirstName();
+    const authenticated_user = new User();
+    authenticated_user.id = profile.getEmail();
+    authenticated_user.first_name = profile.getName();
+    console.log(authenticated_user);
   }
 
   ngOnInit() {

@@ -25,6 +25,6 @@ class GameListAdmin(ImportExportTimeStampedAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(ImportExportTimeStampedAdmin):
-	list_display = ("game", "description", "is_critic", "is_user")
+	list_display = ("game", "description", "is_critic", "is_user", "sentiment_score", "sentiment_magnitude")
 	list_filter = ("game", "is_critic", "is_user")
 	search_fields = ("game", "is_critic", "is_user")

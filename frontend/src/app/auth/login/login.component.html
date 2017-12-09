@@ -1,59 +1,76 @@
-<app-header></app-header>
 
-<div class="container">
-  <div class="section">
+<!-- Login -->
+<ul class="right hide-on-med-and-down">
+  <a class="waves-effect waves-light btn modal-trigger" (click)="openModal()">Login</a>
+</ul>
 
-    <div class="row">
+<!-- Modal Structure -->
+<div id="modal1" class="modal" materialize="modal"
+     [materializeParams]="[{dismissible: false}]"
+     [materializeActions]="modalActions">
 
-      <!-- Social Auth -->
-      <div class="row center">
+  <div class="modal-content">
+    <h4>Login</h4>
 
-        <button class="loginBtn loginBtn--facebook" (click)="login('facebook')">
-          Login with Facebook
-        </button>
+    <!-- Social Auth -->
+    <div class="row center">
 
-        <button class="loginBtn loginBtn--google" (click)="login('google')">
-          Login with Google
-        </button>
 
-      </div>
+      <button class="loginBtn loginBtn--google" (click)="login('google')">
+        Login with Google
+      </button>
 
-      <hr>
-      <br>
+      <!--<google-signin-->
+      <!--[clientId]="googleClientId"-->
+      <!--[width]="myWidth"-->
+      <!--[theme]="myTheme"-->
+      <!--[scope]="myScope"-->
+      <!--[longTitle]="myLongTitle"-->
+      <!--(googleSignInSuccess)="onGoogleSignInSuccess($event)">-->
+      <!--</google-signin>-->
 
-      <!-- Custom Auth -->
+      <button class="loginBtn loginBtn--facebook" (click)="login('facebook')">
+        Login with Facebook
+      </button>
 
-      <form class="col s12">
-
-        <div class="row">
-          <div class="input-field col s12">
-            <input placeholder="Username*" id="user_name" type="text" class="validate">
-            <label for="user_name">Username</label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-field col s12">
-            <input placeholder="Password (min 8 characters)*" id="password" type="password" class="validate">
-            <label for="password">Password</label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col s6">
-            <button class="btn waves-effect waves-light" type="submit" name="action">Login
-              <i class="material-icons right">send</i>
-            </button>
-          </div>
-
-          <div class="col s6">
-            <a href="/resetpassword">Forgot Password?</a>
-          </div>
-        </div>
-
-      </form>
     </div>
 
+    <hr>
+    <br>
+
+    <!-- Custom Auth -->
+    <form class="col s12">
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Username*" id="user_name" type="text" class="validate">
+          <label for="user_name">Username</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Password (min 8 characters)*" id="password" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s6">
+          <button class="btn waves-effect waves-light disabled" type="submit" name="action">Login
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+
+        <div class="col s6">
+          <a class="disabled">Forgot Password?</a>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="closeModal()">Logout</a>
   </div>
 </div>
-<app-footer></app-footer>

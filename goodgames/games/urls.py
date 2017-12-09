@@ -8,9 +8,9 @@ urlpatterns = [
 	url(r'^(?P<pk>[0-9]+)$', views.get_game_details, name='get_game_details'),
 	url(r'choices', views.genres, name='choices'),
 	url(r'search/(?P<q>.+)$', views.searchBy, name='game_search'),
+	url(r'sentiment/(?P<pk>[0-9]+)$', views.sentiment, name='comment_sentiment'),
 	url(r'(?P<type>genre|platform|rating)/(?P<choice>.+)$', views.filterBy, name='filterByAll'),
-	url(r'^(?P<pk>[0-9]+)/reviews/(?P<review>critic|user)$', views.get_all_comments,
-	    name='getCommentByType'),
-
+	url(r'^(?P<pk>[0-9]+)/reviews/(?P<review>critic|user)$', views.get_all_comments, name='getCommentByType'),
+	url(r'^(?P<pk>[0-9]+)/reviews', views.get_all_comments, name='getCommentByType'),
 
 ]

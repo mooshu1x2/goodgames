@@ -24,7 +24,6 @@ export class SearchBarComponent implements OnInit {
 
   getChoices() {
     this.getData().subscribe(data => {
-      console.log(data);
       this.data = data;
     });
   }
