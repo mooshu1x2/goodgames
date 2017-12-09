@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {GameService} from '../games/shared/game.service';
-import {ActivatedRoute} from '@angular/router';
-
-import {Game} from '../games/shared/game';
-// import {GameService} from '../games/shared/game.service';
+import {Router, ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -12,22 +9,15 @@ import {Game} from '../games/shared/game';
   encapsulation: ViewEncapsulation.None
 })
 export class GameSearchComponent implements OnInit {
+  searchTerm: string;
 
-  constructor(private gameService: GameService,
-              private route: ActivatedRoute) {
+  constructor(private router: Router) {
+  }
+
+  onSubmit() {
+    this.router.navigate(['/search', this.searchTerm]);
   }
 
   ngOnInit() {
-    this.getGame();
-  }
-
-  getGame(): void {
-    this.route.params.subscribe((params: any) => {
-      console.log(params);
-      // if (params['id']) {
-      //   const id = params['id'];
-      //   this.gameService.getGameById(id).subscribe((game => this.game = game));
-      // }
-    });
   }
 }

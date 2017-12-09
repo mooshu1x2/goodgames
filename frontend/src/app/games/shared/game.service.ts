@@ -61,7 +61,7 @@ export class GameService {
    * @returns {Subscription}
    */
   getGameById(gameId: number): Observable<Game> {
-    return this.http.get<Game>(this.gamesUrl + '/' + gameId).pipe(
+    return this.http.get<Game>(this.gamesUrl + gameId).pipe(
       tap(_ => console.log(`fetched game id=${gameId}`)),
       catchError(this.handleError<Game>(`getHero id=${gameId}`))
     );
@@ -74,7 +74,9 @@ export class GameService {
    * @returns {Subscription}
    */
   getGameComments(gameId: number, type: string) {
-    const url = `${this.gamesUrl}/${gameId}/reviews/${type}`;
+    // const url = `${this.gamesUrl}/${gameId}/reviews/${type}/`;
+    const url = `${this.gamesUrl}${gameId}/reviews/critic`;
+
     return this.http.get<any>(url).pipe(
       tap(comments => console.log(`fetched game comments id=${gameId}`)),
       catchError(this.handleError<Game>(`getGameComments id=${gameId}`))
@@ -104,7 +106,7 @@ export class GameService {
       // if not search term, return empty game array.
       return of([]);
     }
-    const url = `${this.gamesUrl}?name=${term}`
+    const url = `${this.gamesUrl}/search/${term}`
     return this.http.get<Game[]>(url).pipe(
       tap(_ => console.log(`found games matching "${term}"`)),
       catchError(this.handleError<Game[]>('searchGames', []))
@@ -119,6 +121,7 @@ export class GameService {
    */
   filterGames(field: string, value: string): Observable<Game[]> {
     const url = `${this.gamesUrl}/${field}/${value}`;
+    console.log('url is = ' + url);
     return this.http.get<Game[]>(url).pipe(
       tap(_ => console.log(`found games matching "${field}" of type "${value}"`)),
       catchError(this.handleError<Game[]>('filterGames', []))

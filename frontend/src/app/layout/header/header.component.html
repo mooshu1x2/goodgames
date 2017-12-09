@@ -1,17 +1,73 @@
 <header>
 
   <!-- Modal Structure -->
-  <div id="modal1" class="modal bottom-sheet" materialize="modal"
+  <div id="modal1" class="modal" materialize="modal"
        [materializeParams]="[{dismissible: false}]"
        [materializeActions]="modalActions">
 
     <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
+      <h4>Login</h4>
+
+      <!-- Social Auth -->
+      <div class="row center">
+
+
+        <button class="loginBtn loginBtn--google" (click)="login('google')">
+          Login with Google
+        </button>
+
+        <!--<google-signin-->
+          <!--[clientId]="googleClientId"-->
+          <!--[width]="myWidth"-->
+          <!--[theme]="myTheme"-->
+          <!--[scope]="myScope"-->
+          <!--[longTitle]="myLongTitle"-->
+          <!--(googleSignInSuccess)="onGoogleSignInSuccess($event)">-->
+        <!--</google-signin>-->
+
+        <button class="loginBtn loginBtn--facebook" (click)="login('facebook')">
+          Login with Facebook
+        </button>
+
+      </div>
+
+      <hr>
+      <br>
+
+      <!-- Custom Auth -->
+      <form class="col s12">
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Username*" id="user_name" type="text" class="validate">
+            <label for="user_name">Username</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Password (min 8 characters)*" id="password" type="password" class="validate">
+            <label for="password">Password</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col s6">
+            <button class="btn waves-effect waves-light disabled" type="submit" name="action">Login
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+
+          <div class="col s6">
+            <a class="disabled">Forgot Password?</a>
+          </div>
+        </div>
+
+      </form>
+
     </div>
     <div class="modal-footer">
-      <a class="waves-effect waves-green btn-flat" (click)="closeModal()">Close</a>
-      <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+      <a class="waves-effect waves-green btn-flat" (click)="closeModal()">Logout</a>
     </div>
   </div>
 

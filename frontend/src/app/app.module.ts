@@ -16,6 +16,7 @@ import { TeamComponent } from './team/team.component';
 import {GameSearchComponent} from './search/game-search.component';
 import {GameResultsComponent} from './search/game-results/game-results.component';
 import { MaterializeModule } from 'angular2-materialize';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MaterializeModule } from 'angular2-materialize';
     LayoutModule,
     AuthModule,
     MaterializeModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

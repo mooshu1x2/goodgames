@@ -1,5 +1,5 @@
 <section>
-  <div class="row">
+<!--   <div class="row">
     <div class="col s6">
       <h3 class="center light red-text text-lighten-2">User Reviews</h3>
       <div *ngIf="user_review">
@@ -24,7 +24,17 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs" materialize="tabs">
+        <li class="tab col s3"><a href="#test1">User Reviews</a></li>
+        <li class="tab col s3"><a class="active" href="#test2">Critic Reviews</a></li>
+      </ul>
+    </div>
+    <div id="test1" class="col s12">User Reviews</div>
+    <div id="test2" class="col s12">Critic Reviews</div>
   </div>
-
-
+<router-outlet></router-outlet>
 </section>

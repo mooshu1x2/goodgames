@@ -1,9 +1,11 @@
 import {Component, OnInit, ViewEncapsulation, ViewChild, Input, Output} from '@angular/core';
 import {GameService} from '../../shared/game.service';
+import {MaterializeDirective} from "angular2-materialize";
 
 import {Game, Comment} from '../../shared/game';
 
 import {ActivatedRoute} from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-reviews',

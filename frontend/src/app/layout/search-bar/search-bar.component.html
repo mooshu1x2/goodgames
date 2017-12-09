@@ -4,10 +4,10 @@
       <h5 class="center">Search and browse games</h5>
 
       <div class="col s12 m6 offset-m3 ">
-        <form>
+        <form (ngSubmit)="onSubmit()" #searchForm="ngForm">
           <div class="input-field">
             <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-            <input id="search" type="search">
+            <input id="search" type="search" [(ngModel)]="searchTerm" #name="ngModel" name="search">
             <i class="material-icons">close</i>
           </div>
         </form>
@@ -20,16 +20,16 @@
       <div class="col s12 m3">
         <h5 class="center">Genres</h5>
         <ul class="wrap">
-          <ng-container *ngFor="let genre of data.genres">
-            <li><a href="/search?genre={{ genre.id }}">{{ genre.value }}</a></li>
-          </ng-container>
+        <ng-container *ngFor="let genre of data.genres">
+          <li><a [routerLink]="['/search/genre', genre.id]"> {{ genre.value }} </a></li>
+        </ng-container>
         </ul>
       </div>
       <div class="col s12 m6">
         <h5 class="center">Platforms</h5>
         <ul class="wrap">
           <ng-container *ngFor="let platform of data.platforms">
-            <li><a href="/search?platform={{platform.id}}">{{platform.value}}</a></li>
+            <li><a [routerLink]="['/search/platform', platform.id]"> {{ platform.value }} </a></li>
           </ng-container>
         </ul>
       </div>
@@ -37,7 +37,7 @@
         <h5 class="center">ESRB</h5>
         <ul class="wrap">
           <ng-container *ngFor="let rating of data.ratings">
-            <li><a href="/search?rating={{ rating.id }}">{{ rating.value }}</a></li>
+            <li><a [routerLink]="['/search/rating', rating.id]"> {{ rating.value }} </a></li>
           </ng-container>
         </ul>
       </div>

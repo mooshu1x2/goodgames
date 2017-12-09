@@ -6,6 +6,7 @@ import {HomeComponent} from './home/home.component';
 import {TeamComponent} from './team/team.component';
 // import {GameTopComponent} from './games/game-top/game-top.component';
 import {GameSearchComponent} from './search/game-search.component';
+import {GameResultsComponent} from './search/game-results/game-results.component';
 
 const routes: Routes = [
   {
@@ -30,7 +31,11 @@ const routes: Routes = [
     loadChildren: 'app/games/games.module#GamesModule'
   },
   {
-    path: 'search',
+    path: 'search/:term',
+    component: GameSearchComponent
+  },
+  {
+    path: 'search/:field/:id',
     component: GameSearchComponent
   }
 ];

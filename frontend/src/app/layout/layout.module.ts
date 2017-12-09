@@ -11,12 +11,17 @@ import { MaterializeModule } from 'angular2-materialize';
 
 import { LoginComponent } from '../auth/login/login.component';
 import { GameService} from '../games/shared/game.service';
+import { FormsModule } from '@angular/forms';
+
+// import { AuthService, AppGlobals } from 'angular2-google-login';
+import { GoogleSignInComponent} from 'angular-google-signin';
 
 @NgModule({
   imports: [
     CommonModule,
     LayoutRoutingModule,
     MaterializeModule,
+    FormsModule,
   ],
   exports: [
     FooterComponent,
@@ -29,9 +34,10 @@ import { GameService} from '../games/shared/game.service';
     HeaderComponent,
     SplashComponent,
     SearchBarComponent,
+    GoogleSignInComponent,
   ],
   providers: [
-    GameService
+    GameService,
   ]
 })
 
