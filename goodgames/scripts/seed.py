@@ -74,7 +74,7 @@ def create_game(client):
 
 		critic_reviews = d['critic_reviews']
 		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), d['name']))
-		for c in critic_reviews:
+		for c in critic_reviews[:5]:
 			# Quick and dirty way to restrict length of comment to 1024 characters
 			desc = c[:1024] if len(c) > 1024 else c
 			desc = desc.encode('ascii', 'ignore')
@@ -95,7 +95,7 @@ def create_game(client):
 
 		user_reviews = d['user_reviews']
 		print("Creating {} user reviews for game {}...".format(len(user_reviews), d['name']))
-		for u in user_reviews:
+		for u in user_reviews[:5]:
 			# Quick and dirty way to restrict length of comment to 1024
 			# characters
 			desc = u[:1024] if len(u) > 1024 else u

@@ -10,7 +10,6 @@ from base.models import (TimeStampedModel, )
 
 class Game(TimeStampedModel):
 	# Platforms
-	UNK = 'Unknown'
 	# Old School
 	ATARI = '2600'
 	SEGA = 'GEN'
@@ -87,7 +86,6 @@ class Game(TimeStampedModel):
 		(WIIU, 'WiiU'),
 		(SWITCH, 'Nintendo Switch'),
 		(PC, 'PC'),
-		(UNK, UNK),
 	)
 
 	GENRE_OPTIONS = (
@@ -103,7 +101,6 @@ class Game(TimeStampedModel):
 		(SPORTS, SPORTS),
 		(STRATEGY, STRATEGY),
 		(MISC, MISC),
-		(UNK, UNK)
 	)
 
 	RATING_OPTIONS = (
@@ -115,15 +112,14 @@ class Game(TimeStampedModel):
 		(M, 'Mature'),
 		(AO, 'Adults Only'),
 		(KA, 'Kids to Adults'),
-		(UNK, UNK)
 	)
 
 	# Required
 	title = models.CharField(max_length=120)
 	# is_sequel = models.BooleanField(default=False)
-	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS, default=UNK)
-	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS, default=UNK)
-	rating = models.CharField(max_length=30, choices=RATING_OPTIONS, default=UNK)
+	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS)
+	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS)
+	rating = models.CharField(max_length=30, choices=RATING_OPTIONS)
 
 	# Optional
 	release_date = models.DateField(null=True, blank=True)

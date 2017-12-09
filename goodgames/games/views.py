@@ -21,6 +21,9 @@ from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 
+from django.db.models import Q
+import operator
+
 # Create your views here.
 
 @throttle_classes([UserRateThrottle])
@@ -119,3 +122,12 @@ def filterBy(request, type, choice):
 				results.append(serialize.data)
 			return Response(results, status=status.HTTP_200_OK)
 		return Response({}, status=status.HTTP_200_OK)
+
+@throttle_classes([UserRateThrottle])
+@api_view(['GET'])
+def searchBy(request, q):
+	if request.method == 'GET':
+		query_list = q.split()
+		result = Game.objects.filter(reduce(operator.or_, (Q(title__icontains=i) for i in query_list)))
+		results = [GameSerializer(ob).data for ob in result]
+		return Response(results, status=status.HTTP_200_OK)
