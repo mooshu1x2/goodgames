@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from itertools import chain
+
 from rest_framework import permissions, status
 
 from rest_framework.decorators import (api_view,
@@ -13,8 +15,12 @@ from rest_framework.response import Response
 
 from django.shortcuts import render
 
-from .models import (Game, Comment)
-from .serializers import (GameSerializer, CommentSerializer)
+from django.contrib.auth.models import User
+from .models import (Game, GameList, Comment)
+from .serializers import (GameSerializer, GameListSerializer, CommentSerializer)
+
+from friends.models import Friend
+from friends.serializers import FriendSerializer
 
 # Imports the Google Cloud client library
 from google.cloud import language
@@ -93,7 +99,6 @@ def create_game(request):
 	except:
 		pass
 
-
 @throttle_classes([UserRateThrottle])
 @api_view(['GET'])
 # @permission_classes((permissions.IsAuthenticated, HasVerifiedEmail))
@@ -138,7 +143,6 @@ def searchBy(request, q):
 		results = [GameSerializer(ob).data for ob in result]
 		return Response(results, status=status.HTTP_200_OK)
 
-
 @throttle_classes([UserRateThrottle])
 @api_view(['GET'])
 def sentiment(request, pk):
@@ -167,3 +171,79 @@ def sentiment(request, pk):
 			'magnitude': sentiment.magnitude
 		}
 		return Response(results, status=status.HTTP_200_OK)
+
+@throttle_classes([UserRateThrottle])
+@api_view(['GET'])
+def gameUserList(request, user_id):
+	# user = User.objects.get(email=user_id)
+	if request.method == 'GET':
+		queryset = GameList.objects.filter(user__email=user_id)
+		results = [GameListSerializer(ob).data for ob in queryset]
+		return Response(results, status=status.HTTP_200_OK)
+
+@throttle_classes([UserRateThrottle])
+@api_view(['GET'])
+def friendsList(request, user_id):
+	if request.method == 'GET':
+		# i = Friend.objects.select_related().filter(user__email=user_id)
+		# print(i)
+		# result_list = sorted(
+		# 		chain(page_list, article_list, post_list),
+		# 		key=lambda instance: instance.date_created)
+
+		# queryset = Friend.objects.filter(user__email=user_id)
+		# # For each of my friends, get their games
+		# results = []
+		#
+		# for f in queryset:
+		# 	friend_email = FriendSerializer(f).data['friend']['email']
+		#
+		# 	print(friend_email)
+		# 	q = GameList.objects.get(user__email=friend_email)
+		# 	print(q.entry_set.all() ) # Returns all Entry objects for this Author.
+		# 	# q = GameList.objects.filter(user__email=friend_email).order_by('-modified_at')
+
+			# results.append(GameListSerializer(q))
+			# print(GameListSerializer(q).data)
+		# result_list = list(chain(*results))
+
+		# print(result_list)
+		# res = [GameListSerializer(obj) for obj in results]
+		# union(*other_qs, all=False)
+		# qs1.union(qs2).order_by('name')
+
+		return Response([], status=status.HTTP_200_OK)
+# record = Record.objects.get(pk=record_id)
+# values = Value.objects.filter(record=record).select_related()
+
+@throttle_classes([UserRateThrottle])
+@api_view(['GET'])
+def gameUserListType(request, user_id, type):
+	# user = User.objects.get(email=user_id)
+	print(type)
+	print("try to fetch a specific category in gamelist")
+	if request.method == 'GET':
+		queryset = GameList.objects.filter(user__email=user_id, type=type)
+		results = [GameListSerializer(ob).data for ob in queryset]
+		return Response(results, status=status.HTTP_200_OK)
+	else:
+		return Response([], status=status.HTTP_200_OK)
+
+@throttle_classes([UserRateThrottle])
+@api_view(['POST'])
+def gameList(request):
+	data = request.data
+	user = User.objects.get(email=data['user'])
+	game = Game.objects.get(pk=data['game'])
+	type = data['type']
+	# Bucket - save changes to gamelist by either
+	# creating a new bucket or updated the current state of one
+	if request.method == 'POST':
+		obj = None
+		try:
+			obj = GameList.objects.get(user=user, game=game)
+			obj.type = type.upper()
+			obj.save()
+		except GameList.DoesNotExist:
+			obj = GameList.objects.create(user=user, game=game, type=type.upper())
+		return Response(GameListSerializer(obj).data, status=status.HTTP_200_OK)

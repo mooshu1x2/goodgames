@@ -34,12 +34,14 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name='admin'),
 
     url(r'^api/auth/', include('rest_auth.urls')),
-    # url(r'^api/auth/', include('accounts.urls')),
+    url(r'^api/auth/', include('accounts.urls')),
 
     url(r'^api/auth/registration/', include('rest_auth.registration.urls')),
 
     url(r'^api/games/', include('games.urls', namespace='games')),
     url(r'^api/web/',  include('web.urls', namespace='web')),
+
+    url(r'^api/friends/', include('friends.urls', namespace='friends')),
 ]
 
 if settings.DEBUG:

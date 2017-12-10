@@ -116,6 +116,7 @@ class Game(TimeStampedModel):
 
 	# Required
 	title = models.CharField(max_length=120)
+	description = models.CharField(max_length=512, default='')
 	# is_sequel = models.BooleanField(default=False)
 	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS)
 	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS)
@@ -161,27 +162,24 @@ class GameList(TimeStampedModel):
 		('WANT TO PLAY', 'Want to Play'),
 		('HAVE PLAYED', 'Have Played'),
 		('NEVER', 'Never want to play'),
-		('OTHER', 'Other')
+		('CURRENTLY PLAYING', 'Currently Playing')
 	)
 
-	name = models.CharField(max_length=120)
+	# name = models.CharField(max_length=120)
 	type = models.CharField(max_length=30, choices=LIST_OPTIONS)
-
-	user = models.ForeignKey(User)
-	game = models.ForeignKey(Game)
+	user = models.ForeignKey(User, related_name='user')
+	game = models.ForeignKey(Game, related_name='game')
 
 	def __unicode__(self):
-		return '{0}:{1}:{2}:{3}'.format(self.name, self.type,
-		                                self.game, self.user)
+		return '{0}:{1}:{2}'.format(self.type, self.game, self.user)
 
 	class Meta:
 		app_label = 'games'
 		db_table = 'game_list'
 		indexes = [
-			models.Index(fields=['name', 'type']),
-			models.Index(fields=['name', 'type', 'game'])
+			models.Index(fields=['type', 'game'])
 		]
-		unique_together = ('name', 'user', 'game')
+		unique_together = ('user', 'game')
 
 
 class Comment(TimeStampedModel):
@@ -204,4 +202,5 @@ class Comment(TimeStampedModel):
 			models.Index(fields=['game', 'is_user'])
 		]
 		# unique_together = ('game', 'description')
+
 

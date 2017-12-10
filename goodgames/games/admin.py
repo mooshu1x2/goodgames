@@ -11,7 +11,7 @@ from .models import (Game, GameList, Comment)
 
 @admin.register(Game)
 class GameAdmin(ImportExportTimeStampedAdmin):
-    list_display = ("title", "platform", "release_date", "genre", "publisher", "developer",
+    list_display = ("title", "description", "platform", "release_date", "genre", "publisher", "developer",
                     "rating")
     list_filter = ("platform", "genre", "publisher", "developer", "rating")
     search_fields = ("title", "platform")
@@ -19,7 +19,7 @@ class GameAdmin(ImportExportTimeStampedAdmin):
 
 @admin.register(GameList)
 class GameListAdmin(ImportExportTimeStampedAdmin):
-	list_display = ("name", "type", "user", "game")
+	list_display = ("type", "user", "game")
 	list_filter = ("type", "game")
 	search_fields = ("type", "user", "game")
 

@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 CORS_ORIGIN_WHITELIST = ('localhost:4200',
                          'https://goodgames-185922.firebaseapp.com')
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 # Application definition
 
@@ -47,6 +47,7 @@ OUR_APPS = [
     'accounts',
     'base',
     'games',
+    'friends',
     'web',
 ]
 
@@ -58,6 +59,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     # include providers you want to enable
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
@@ -95,12 +97,31 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': { 'access_type': 'online' }
     },
-    'facebook': {
-        'SCOPE': [
-            'email'
-        ]
-    }
+    'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email','public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'kr_KR',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4'}
 }
+
+#facebook
+SOCIAL_AUTH_FACEBOOK_KEY = '2069306053353814'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET ='2d84342104c4f0686f534a01302b5639' #app key
 
 # SECRETS
 SOCIAL_AUTH_SECRETS = {
