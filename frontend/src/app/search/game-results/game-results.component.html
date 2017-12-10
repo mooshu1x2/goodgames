@@ -3,16 +3,10 @@
 
   <div class="row">
 
-    <!-- Dropdown Structure -->
-    <ul id='dropdown1' class='dropdown-content'>
-      <li><a href="#!">Want to Play</a></li>
-      <li><a href="#!">Have Played</a></li>
-    </ul>
-
     <!-- Page Layout here -->
     <div class="row">
       <div *ngIf="games?.length > 0; else nothing">
-        <table class="striped highlight">
+        <table class="striped highlight responsive-table">
           <thead>
           <tr>
             <th>Cover</th>
@@ -40,12 +34,18 @@
             <td>{{game.rating}}</td>
             <td>{{game.critic_score || 0}}/100</td>
             <td>{{game.release_date}}</td>
-            <td><a class='dropdown-button btn' (click)="add(game)" data-activates='dropdown1'>Pick Me!</a></td>
             <td>
-              <button class="delete" title="delete game"
-                      (click)="delete(game)">x
-              </button>
+              <div class="col s8">
+                <select materialize="material_select" (change)="selected($event, game)" [materializeSelectOptions]="selectOptions">
+                  <option *ngFor="let option of options" [value]="option">{{option}}</option>
+                </select>
+              </div>
             </td>
+            <!--<td>-->
+              <!--<button class="delete" title="delete game"-->
+                      <!--(click)="delete(game)">x-->
+              <!--</button>-->
+            <!--</td>-->
           </tr>
           </tbody>
         </table>

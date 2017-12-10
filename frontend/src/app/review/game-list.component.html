@@ -1,0 +1,57 @@
+<app-header></app-header>
+
+<div class="container">
+  <section>
+    <h2>My Games</h2>
+
+    <div class="col m8">
+
+      <table class="striped highlight respons">
+        <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Title</th>
+          <th>Developer</th>
+          <th>Publisher</th>
+          <th>Platform</th>
+          <th>Score</th>
+          <th>Genre</th>
+          <th>Status</th>
+          <!--<th>Remove</th>-->
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let d of data">
+          <td><i class="fa fa-twitch" aria-hidden="true"></i></td>
+          <td><a routerLink="/games/{{d.game.id}}">{{d.game.title}}</a></td>
+          <td>{{d.game.developer}}</td>
+          <td>{{d.game.publisher}}</td>
+          <td>{{d.game.platform}}</td>
+          <td>{{d.game.critic_score || 0}}/100</td>
+          <td>{{d.game.genre}}</td>
+          <td>
+            <div class="col s2">
+            <select materialize="material_select" (change)="selected($event, d.game)" [materializeSelectOptions]="selectOptions">
+              <option value="d.type" disabled selected>{{d.type}}</option>
+              <option *ngFor="let option of options"
+                      [value]="option">{{option}}
+              </option>
+            </select>
+            </div>
+          </td>
+          <!--<td>-->
+            <!--<button class="delete" title="delete game"-->
+                    <!--(click)="remove(game)">x-->
+            <!--</button>-->
+          <!--</td>-->
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+
+<app-footer></app-footer>

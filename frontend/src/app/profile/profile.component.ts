@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output} from '@angular/core';
+
+import {User} from '../user/user';
 
 @Component({
   selector: 'app-profile',
@@ -7,10 +9,13 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class ProfileComponent implements OnInit {
+  public user: User;
 
   constructor() { }
 
   ngOnInit() {
+    // read from storage
+    this.user = JSON.parse(localStorage.getItem('userKey'));
   }
 
 }

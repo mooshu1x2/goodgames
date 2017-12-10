@@ -1,11 +1,15 @@
-import {Component, OnInit, ViewEncapsulation, AfterViewInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewEncapsulation, Input, EventEmitter} from '@angular/core';
+import { Router } from '@angular/router';
 
 import {MaterializeAction} from 'angular2-materialize';
 import {GoogleSignInSuccess} from 'angular-google-signin';
+import { FacebookService, LoginResponse, LoginOptions } from 'ngx-facebook';
 
-import { User} from '../../user/user';
+import { User } from '../../user/user';
+import {environment} from '../../../environments/environment';
 
-declare const gapi: any;
+import { UserService } from '../../user/user.service';
+import {StorageService} from '../../storage.service';
 
 @Component({
   selector: 'app-header',
@@ -14,15 +18,32 @@ declare const gapi: any;
   encapsulation: ViewEncapsulation.None
 })
 
-export class HeaderComponent implements OnInit, AfterViewInit {
-  @Output() user: User;
+export class HeaderComponent implements OnInit {
+  user: User;
+  is_authenticated: boolean;
   title = 'GoodGames';
+  private googleClientId = environment.google_client_id;
+  private facebookClientId = environment.facebook_client_id;
+
   modalActions = new EventEmitter<string|MaterializeAction>();
 
-  private googleClientId = '319120036661-fm549dr67ad0du26i9t72s7s9fcj6moo.apps.googleusercontent.com';
+  constructor(private router: Router,
+              private authService: UserService,
+              private storageService: StorageService,
+              private fb: FacebookService) {
+    this.user = null;
+    this.is_authenticated = false;
 
-  constructor() { }
+    fb.init({
+      appId: this.facebookClientId,
+      version: 'v2.9'
+    });
 
+  }
+
+  /**
+   * Modals...causing more problems
+   */
   openModal() {
     this.modalActions.emit({
       action: 'modal',
@@ -30,45 +51,116 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Modals...causing more problems
+   */
   closeModal() {
-    // const auth2 = gapi.auth2.getAuthInstance();
-    // auth2.signOut().then(function () {
-    //   console.log('Signed out');
-    // });
-
     this.modalActions.emit({
       action: 'modal',
       params: ['close']
     });
   }
 
-  login(provider: string) {
-  }
-
+  /**
+   * Google Sign On
+   * @param {GoogleSignInSuccess} event
+   */
   onGoogleSignInSuccess(event: GoogleSignInSuccess) {
     const googleUser: gapi.auth2.GoogleUser = event.googleUser;
     const id: string = googleUser.getId();
     const profile: gapi.auth2.BasicProfile = googleUser.getBasicProfile();
-    console.log('ID: ' +
-      profile
-        .getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Email: ' + profile.getEmail());
-    console.log('ID Token: ' + googleUser.getAuthResponse().id_token);
-    console.log('Access Token: ' + googleUser.getAuthResponse().access_token);
+    const user = new User(id, profile.getName(), profile.getEmail(), profile.getImageUrl());
+    this.storageService.storeData('userKey', user);
+    this.login();
+    // Redirect to dashboard
+    // this.router.navigate(['/dashboard']);
+}
 
-    profile.getFirstName();
-    const authenticated_user = new User();
-    authenticated_user.id = profile.getEmail();
-    authenticated_user.first_name = profile.getName();
-    console.log(authenticated_user);
+  /**
+   * Login
+   */
+  login() {
+    // this.closeModal();
+    this.is_authenticated = this.storageService.isAuthenticated();
+    this.user = this.storageService.getData('userKey');
+    this.authService.login();
+  }
+
+  /**
+   * Sign Out
+   * @todo: Bug in Signout; Template doesn't refresh unless button is selected twice
+   */
+  signOut() {
+    const auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    });
+    this.storageService.deleteData('userKey');
+
+    // this.fb.logout()
+    //   .then((res: LoginResponse) => {
+    //     console.log('Logged out', res);
+    //   })
+    //   .catch(this.handleError);
+
+    this.router.navigate(['/']);
+  }
+
+  /**
+   * Login with additional permissions/options
+   */
+  loginWithOptions() {
+
+    const loginOptions: LoginOptions = {
+      enable_profile_selector: true,
+      return_scopes: true,
+      scope: 'public_profile,user_friends,email'
+    };
+
+    this.fb.login(loginOptions)
+      .then((res: LoginResponse) => {
+        console.log('Logged in', res);
+      })
+      .catch(this.handleError);
+
+  }
+
+  getLoginStatus() {
+    this.fb.getLoginStatus()
+      .then(console.log.bind(console))
+      .catch(console.error.bind(console));
+  }
+
+  /**
+   * Get the user's profile
+   */
+  getProfile() {
+    this.fb.api('/me?fields=id,name,email')
+      .then((res: any) => {
+        console.log('Got the users profile', res);
+
+        // res.email, res.name
+      })
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get the users friends
+   */
+  getFriends() {
+    this.fb.api('/me/friends')
+      .then((res: any) => {
+        console.log('Got the users friends', res);
+      })
+      .catch(this.handleError);
+  }
+
+  private handleError(error) {
+    console.error('Error processing action', error);
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-    console.log('init');
+    this.is_authenticated = this.storageService.isAuthenticated();
+    this.user = this.storageService.getData('userKey');
   }
 
 }

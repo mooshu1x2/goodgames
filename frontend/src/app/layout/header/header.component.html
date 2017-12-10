@@ -11,21 +11,16 @@
       <!-- Social Auth -->
       <div class="row center">
 
-
-        <!--<button class="loginBtn loginBtn&#45;&#45;google" (click)="login('google')">-->
-          <!--Login with Google-->
-        <!--</button>-->
-
         <google-signin
-        [clientId]="googleClientId"
-        [width]="myWidth"
-        [theme]="myTheme"
-        [scope]="myScope"
-        [longTitle]="myLongTitle"
-        (googleSignInSuccess)="onGoogleSignInSuccess($event)">
+          [clientId]="googleClientId"
+          [width]="myWidth"
+          [theme]="myTheme"
+          [scope]="myScope"
+          [longTitle]="myLongTitle"
+          (googleSignInSuccess)="onGoogleSignInSuccess($event)">
         </google-signin>
 
-        <!--<button class="loginBtn loginBtn&#45;&#45;facebook" (click)="login('facebook')">-->
+        <!--<button class="loginBtn loginBtn&#45;&#45;facebook" (click)="loginWithOptions()">-->
           <!--Login with Facebook-->
         <!--</button>-->
 
@@ -75,16 +70,24 @@
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">{{ title }}</a>
 
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <ul id="nav-mobile" class="right">
         <!-- Login -->
-        <ng-template #login>
+        <div *ngIf="!is_authenticated">
           <!-- Need to keep the href around: https://github.com/InfomediaLtd/angular2-materialize/issues/335 -->
-          <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1" (click)="openModal()">Login</a></li>
-        </ng-template>
+          <li><a class="waves-effect waves-light modal-trigger" href="#modal1" (click)="openModal()">Login</a></li>
+        </div>
 
-        <li *ngIf="user; else login">
-          <a [routerLink]="['/profile', user.id]">Hi {{ user.first_name }}</a>
-        </li>
+        <div *ngIf="is_authenticated">
+          <li>
+            <a class="waves-effect waves-light" [routerLink]="['/profile']">Hi {{user.name}}!</a>
+          </li>
+          <li>
+            <a class="waves-effect waves-light" [routerLink]="['/review']">My Games</a>
+          </li>
+          <li>
+            <a class="waves-effect waves-light" (click)="signOut()">Logout</a>
+          </li>
+        </div>
 
       </ul>
 

@@ -3,6 +3,7 @@ import {GameService} from '../../games/shared/game.service';
 import {Game} from '../../games/shared/game';
 
 import {ActivatedRoute} from '@angular/router';
+import {StorageService} from '../../storage.service';
 
 @Component({
   selector: 'app-game-results',
@@ -13,8 +14,12 @@ import {ActivatedRoute} from '@angular/router';
 export class GameResultsComponent implements OnInit, AfterViewInit {
   games: Game[];
   private sub: any;
+  options: string[];
+  selectOptions = '';
 
-  constructor(private gameService: GameService, private route: ActivatedRoute) { }
+  constructor(private gameService: GameService, private storageService: StorageService, private route: ActivatedRoute) {
+    this.options = ['HAVE PLAYED', 'WANT TO PLAY', 'NEVER', 'CURRENTLY PLAYING'];
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -45,6 +50,12 @@ export class GameResultsComponent implements OnInit, AfterViewInit {
   searchByField(field: string, value: string) {
     this.gameService.filterGames(field, value)
       .subscribe(games => this.games = games);
+  }
+
+  selected(event, game) {
+    const state = event.target.value;
+    const user = this.storageService.getData('userKey');
+    this.gameService.addGame(user, game, state);
   }
 
 }

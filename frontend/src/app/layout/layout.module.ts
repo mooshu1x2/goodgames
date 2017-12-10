@@ -11,8 +11,10 @@ import { MaterializeModule } from 'angular2-materialize';
 
 import { GameService} from '../games/shared/game.service';
 import { FormsModule} from '@angular/forms';
-// import { AuthService, AppGlobals } from 'angular2-google-login';
 import { GoogleSignInComponent} from 'angular-google-signin';
+import { UserService} from '../user/user.service';
+import { StorageService} from '../storage.service';
+import { FacebookModule } from 'ngx-facebook';
 
 @NgModule({
   imports: [
@@ -20,6 +22,7 @@ import { GoogleSignInComponent} from 'angular-google-signin';
     LayoutRoutingModule,
     MaterializeModule,
     FormsModule,
+    FacebookModule.forRoot(),
   ],
   exports: [
     FooterComponent,
@@ -36,6 +39,8 @@ import { GoogleSignInComponent} from 'angular-google-signin';
   ],
   providers: [
     GameService,
+    UserService,
+    StorageService
   ]
 })
 

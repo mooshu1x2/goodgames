@@ -7,6 +7,8 @@ import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import {Game} from './game';
+import {User} from '../../user/user';
+import {StorageService} from '../../storage.service';
 
 @Injectable()
 export class GameService {
@@ -33,7 +35,7 @@ export class GameService {
     };
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private storageService: StorageService) {
     this.gamesUrl = environment.api_url + '/games';
     this.headers = new HttpHeaders({'Content-Type': 'application/json'});
   }
@@ -46,6 +48,27 @@ export class GameService {
     return this.http.get<Game[]>(this.gamesUrl).pipe(
       tap(games  => console.log(`fetched all games`)),
       catchError(this.handleError('getGames', []))
+    );
+  }
+
+  getMyGames(): Observable<Game[]> {
+    const user = this.storageService.getData('userKey');
+    const url = `${this.gamesUrl}/fetch/${user.email}`;
+
+    return this.http.get<Game[]>(url).pipe(
+      tap(data  => console.log(`fetched all games`)),
+      catchError(this.handleError('getUsersGames', []))
+    );
+  }
+
+  getCurrentlyPlayingGames(): Observable<Game[]> {
+    const user = this.storageService.getData('userKey');
+    const status = 'CURRENTLY PLAYING';
+    const url = `${this.gamesUrl}/lookup/${user.email}/${status}`;
+
+    return this.http.get<Game[]>(url).pipe(
+      tap(games  => console.log(`fetched all currently playing games`)),
+      catchError(this.handleError('getCurrentlyPlaying', []))
     );
   }
 
@@ -98,7 +121,7 @@ export class GameService {
       // if not search term, return empty game array.
       return of([]);
     }
-    const url = `${this.gamesUrl}/search/${term}`
+    const url = `${this.gamesUrl}/search/${term}`;
     return this.http.get<Game[]>(url).pipe(
       tap(_ => console.log(`found games matching "${term}"`)),
       catchError(this.handleError<Game[]>('searchGames', []))
@@ -126,10 +149,49 @@ export class GameService {
    * @returns {Observable<any>}
    */
   analyze(pk: number) {
-    const url = `${this.gamesUrl}/games/sentiment/${pk}`;
+    const url = `${this.gamesUrl}/sentiment/${pk}`;
     return this.http.get(url).pipe(
       tap(sentiment => console.log(`found sentiment matching "${pk}"`)),
-      catchError(this.handleError('analyze', [])))
-  };
+      catchError(this.handleError('analyze', []))
+    );
+  }
 
+  /**
+   *
+   * @param {User} user
+   * @param {Game} game
+   * @param {string} attr
+   * @returns {Observable<any>}
+   */
+  addGame(user: User, game: Game, attr: string) {
+    const data = {
+      'user': user.email,
+      'game': game.id,
+      'type': attr
+    };
+
+    const url = `${this.gamesUrl}/bucket`;
+    this.http.post(url, data) // ...using post request
+      .map(res => console.log(`updating bucket`))
+      .catch((error: any) => Observable.throw( 'Server error'))
+      .subscribe();
+  }
+
+  /**
+   *
+   * @param {User} user
+   * @param {Game} game
+   * @returns {Observable<any>}
+   */
+  removeGame(user: User, game: Game) {
+    const data = {
+      'user': user.email,
+      'game': game.id
+    };
+    const url = `${this.gamesUrl}/remove/${user.email}/${game.id}`;
+    return this.http.post(url, data).pipe(
+      tap(_ => console.log(`deleting game from bucket`)),
+      catchError(this.handleError('removeGame', []))
+    );
+  }
 }

@@ -1,10 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import {LoginComponent} from './auth/login/login.component';
 import {HomeComponent} from './home/home.component';
 import {TeamComponent} from './team/team.component';
 import {GameSearchComponent} from './search/game-search.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {ProfileComponent} from './profile/profile.component';
+import {GameListComponent} from './review/game-list.component';
 
 const routes: Routes = [
   {
@@ -15,10 +17,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   },
   {
     path: 'team',
@@ -35,6 +33,18 @@ const routes: Routes = [
   {
     path: 'search/:field/:id',
     component: GameSearchComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
+  },
+  {
+    path: 'review',
+    component: GameListComponent
   }
 ];
 
@@ -45,7 +55,8 @@ const routes: Routes = [
       // { enableTracing: true } // <-- debugging purposes todo: turn off in production
     )
   ],
-  exports: [ RouterModule ]
+  exports: [RouterModule]
 })
 
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
