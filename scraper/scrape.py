@@ -177,6 +177,8 @@ while games_available:
 
 			data = {
 				"name": vg_game_info["name"],
+				"description": metacritic_scraper.game["description"],
+				"img_url": metacritic_scraper.game["img_url"],
 				"platform": vg_game_info["platform"],
 				"release_year": vg_game_info["year"],
 				"genre": vg_game_info["genre"],

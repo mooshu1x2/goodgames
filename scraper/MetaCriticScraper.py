@@ -5,6 +5,8 @@ class MetaCriticScraper:
 	def __init__(self, url, reviews=False, **kwargs):
 		self.game = {'url': '',
 					 'title': '',
+		             'description': '',
+		             'img_url': '',
 					 'platform': '',
 					 'publisher': '',
 					 'release_date': '',
@@ -52,7 +54,7 @@ class MetaCriticScraper:
 			pass
 
 	def scrape(self):
-		# Get Title and Platform. If site changes and we can't find the right divs or classes
+		# Get Title, and Platform. If site changes and we can't find the right divs or classes
 		# skip and leave these values as empty strings
 		try:
 			product_title_div = self.soup.find("div", class_="product_title")
@@ -61,7 +63,19 @@ class MetaCriticScraper:
 		except:
 			print "WARNING: Problem getting title and platform information"
 			pass
-			
+
+		# Get game description
+		try:
+			self.game['description'] = self.soup.find("li", class_="summary_detail product_summary").find("span", class_="blurb blurb_expanded").text.strip()
+		except:
+			print "WARNING: Problem getting description information"
+
+		# Get game url
+		try:
+			self.game['img_url'] = self.soup.find("div", class_="product_image").find("img", class_="product_image")['src']
+		except:
+			print "WARNING: Problem getting game img url"
+
 		# Get publisher and release date. 
 		try:
 			self.game['publisher'] = self.soup.find("li", class_="summary_detail publisher").a.text.strip()

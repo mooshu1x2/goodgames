@@ -1,4 +1,0 @@
-scraper
-=======
-
-MetaCritic Scraper
