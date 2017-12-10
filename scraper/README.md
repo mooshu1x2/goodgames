@@ -4,7 +4,7 @@ MetaCritic Scraper
 How to Run
 ----------
 
-1. Install dependencies
+1. Install dependencies into a [virtual environment].
     ```bash
     cd scraper
     virtualenv env
@@ -28,3 +28,5 @@ How to Run
    ```bash
     cp gamedata* ../goodgames/scripts/gamedata.json
     ```
+    
+[virtual environment]: https://virtualenv.pypa.io/
