@@ -68,6 +68,18 @@ Deploy GoodGames in Development Environment connected to Cloud SQL
     pip install -r requirements.txt
     ```
 
+1. Enable Cloud.
+    Edit two files, goodgames/scripts/seed.py and 
+    goodgames/games/views.py
+    
+    Ensure that you have been authenticated before running
+    this command. 
+    Default is False. None of the user reviews or critic reviews
+    for games will be analyzed. 
+    
+    ```bash
+    ENABLE_CLOUD = True
+    ```
 1. Setup Django models
 
     ```bash

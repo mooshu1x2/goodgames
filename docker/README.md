@@ -9,13 +9,14 @@ Using Docker
    $ pip install docker-compose
    ```
    
-1. Launch the database container. You will need to manually create a database, user, and password.
-   ```bash
-   docker exec -it <mycontainer> bash
-   ```
+1. Register your GoogleCloud Account and make sure to ENABLE_CLOUD 
+   in the goodgames backend service. Instructions can be found in the goodgames README.
+   
+   Export your credentials file (named credentials.json) and place it in the
+   docker/ directory.
    
 1. Build and run the [Docker] containers. This might take a while. 
-   You should be able to access GoodGames at localhost:8888. The backend
+   You should be able to access GoodGames at localhost:4200. The backend
    is served on localhost:8000.
 
    ```bash

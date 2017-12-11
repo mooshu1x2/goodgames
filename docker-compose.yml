@@ -29,6 +29,6 @@ services:
     environment:
       NODE_ENV: development
     ports:
-      - "8888:8888"
+      - "4200:4200"
     depends_on:
       - django

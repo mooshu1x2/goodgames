@@ -26,11 +26,12 @@ Current Features
 * Django (1.11.7 ) backend REST API to serve games and friends information.
   * Integrated with Google Natural Language API to analyze sentiment from collected user and critic reviews.
 * Angular2 (v.5) frontend application integrated with Materialize CSS Framework. 
-* Social authentication
+* Google authentication
 
 Missing Features
 ----------------
-* Facebook login.
+* Facebook authentication.
+* Ability to remove games from inventory.
 * Display friends and what they are playing and reviewing.
 
 Potential Improvements
@@ -41,12 +42,14 @@ Potential Improvements
 * Completely fix up the frontend interface. Materialze CSS does not play well with Angular2. 
 * Rewrite DRF serializers to simplify parsing.
 * Reorganize frontend to modularize certain pages (gameresults page and search page are nearly identical, but exist as two separate components).
- 
+* Learn more about how to integrate OAuth2 with Django backend. All authenticaton was performed in frontend.  
+
 Bugs
 ----
 * Bug when logging out. Page does not update; need manual refresh to update data bindings.
 * Sticky footer does not stick.
 * Dropdown select menus are cutoff in mobile view.
+* Search icon overlaps textbox.
 
 The Team
 --------

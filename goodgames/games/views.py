@@ -30,6 +30,7 @@ from google.cloud.language import types
 from django.db.models import Q
 import operator
 
+ENABLE_CLOUD = False
 # Create your views here.
 
 @throttle_classes([UserRateThrottle])
@@ -158,18 +159,20 @@ def sentiment(request, pk):
 		for c in comments:
 			comment_str += c
 
-		# Instantiates a client
-		client = language.LanguageServiceClient()
-		document = types.Document(content=comment_str,
-		                          type=enums.Document.Type.PLAIN_TEXT)
+		results = []
+		if ENABLE_CLOUD:
+			# Instantiates a client
+			client = language.LanguageServiceClient()
+			document = types.Document(content=comment_str,
+			                          type=enums.Document.Type.PLAIN_TEXT)
 
-		# Detects the sentiment of the text
-		sentiment = client.analyze_sentiment(document=document).document_sentiment
+			# Detects the sentiment of the text
+			sentiment = client.analyze_sentiment(document=document).document_sentiment
 
-		results = {
-			'sentiment': sentiment.score,
-			'magnitude': sentiment.magnitude
-		}
+			results = {
+				'sentiment': sentiment.score,
+				'magnitude': sentiment.magnitude
+			}
 		return Response(results, status=status.HTTP_200_OK)
 
 @throttle_classes([UserRateThrottle])

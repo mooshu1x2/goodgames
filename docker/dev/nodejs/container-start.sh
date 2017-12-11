@@ -1,2 +1,3 @@
 #!/bin/bash
-gulp connect
+#ng serve
+npm start

@@ -17,6 +17,7 @@ from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 
+ENABLE_CLOUD = False
 
 def create_user(is_admin, username=""):
 	"""
@@ -41,7 +42,7 @@ def create_user(is_admin, username=""):
 	return user
 
 
-def create_game(client, users):
+def create_game(users):
 	"""
 	Create games from curated list, including comments
 	"""
@@ -81,26 +82,41 @@ def create_game(client, users):
 
 		critic_reviews = d['critic_reviews']
 		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), name))
+
+		client = None
+		if ENABLE_CLOUD:
+			client = language.LanguageServiceClient()
+
 		for c in critic_reviews[:1]:
 			# Quick and dirty way to restrict length of comment to 1024 characters
 			desc = c[:1024] if len(c) > 1024 else c
 			desc = desc.encode('ascii', 'ignore')
-			document = types.Document(content=desc, type=enums.Document.Type.PLAIN_TEXT)
 
-			# Detects the sentiment of the text
-			sentiment = client.analyze_sentiment(document=document).document_sentiment
-			print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
-
-			comment = Comment.objects.create(
-					game=game,
-					description=desc,
-					is_critic=True,
-					is_user=False,
-					sentiment_score=format(sentiment.score, '.3f'),
-					sentiment_magnitude=format(sentiment.magnitude, '.3f'),
-			)
-			time.sleep(1)
-
+			if ENABLE_CLOUD:
+				document = types.Document(content=desc,
+				                          type=enums.Document.Type.PLAIN_TEXT)
+				# Detects the sentiment of the text
+				sentiment = client.analyze_sentiment(document=document).document_sentiment
+				print('Sentiment: {}, {}'.format(sentiment.score,
+				                                 sentiment.magnitude))
+				comment = Comment.objects.create(
+						game=game,
+						description=desc,
+						is_critic=True,
+						is_user=False,
+						sentiment_score=format(sentiment.score, '.3f'),
+						sentiment_magnitude=format(sentiment.magnitude, '.3f'),
+				)
+				time.sleep(1)
+			else:
+				comment = Comment.objects.create(
+						game=game,
+						description=desc,
+						is_critic=True,
+						is_user=False,
+						sentiment_score=0,
+						sentiment_magnitude=0
+				)
 
 		user_reviews = d['user_reviews']
 		print("Creating {} user reviews for game {}...".format(len(user_reviews), name))
@@ -110,23 +126,32 @@ def create_game(client, users):
 			desc = u[:1024] if len(u) > 1024 else u
 			desc = desc.encode('ascii', 'ignore')
 
-			document = types.Document(content=desc,
-			                          type=enums.Document.Type.PLAIN_TEXT)
+			if ENABLE_CLOUD:
+				document = types.Document(content=desc,
+				                          type=enums.Document.Type.PLAIN_TEXT)
 
-			# Detects the sentiment of the text
-			sentiment = client.analyze_sentiment(document=document).document_sentiment
-			print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
+				# Detects the sentiment of the text
+				sentiment = client.analyze_sentiment(document=document).document_sentiment
+				print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
 
-			comment = Comment.objects.create(
-					game=game,
-					description=desc,
-					is_critic=False,
-					is_user=True,
-					sentiment_score=format(sentiment.score, '.3f'),
-					sentiment_magnitude=format(sentiment.magnitude, '.3f'),
-			)
-			time.sleep(1)
-
+				comment = Comment.objects.create(
+						game=game,
+						description=desc,
+						is_critic=False,
+						is_user=True,
+						sentiment_score=format(sentiment.score, '.3f'),
+						sentiment_magnitude=format(sentiment.magnitude, '.3f'),
+				)
+				time.sleep(1)
+			else:
+				comment = Comment.objects.create(
+						game=game,
+						description=desc,
+						is_critic=False,
+						is_user=True,
+						sentiment_score=0,
+						sentiment_magnitude=0,
+				)
 
 	# Pick a random assortment of games
 	choices = ['WANT TO PLAY', 'HAVE PLAYED', 'NEVER', 'CURRENTLY PLAYING']
@@ -158,7 +183,4 @@ def run(*args, **options):
 
 	# Create curated list of games from data file and randomly associate games
 	# with the seeded user base
-
-	# Instantiates a client
-	client = language.LanguageServiceClient()
-	create_game(client, [admin, participant_user, host_user])
+	create_game([admin, participant_user, host_user])
