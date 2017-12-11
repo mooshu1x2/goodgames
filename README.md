@@ -3,6 +3,12 @@ GoodGames
 GoodGames is a social service to allow gamers to curate their list of games and 
 see what their friends are playing, agnostic of console/pc platforms. 
 
+How to Start
+------------
+1. Scraper
+1. GoodGames
+1. Frontend
+
 Deployment Options
 ------------------
 * Deploy GoodGames in Development Environment
@@ -12,28 +18,40 @@ Deployment Options
 If you do not have a Google Cloud account and just want to simply deploy
 GoodGames, use Docker.
 
-Using Docker
-------------
-1. Install [Docker] on your machine.
+Current Features
+----------------
+* Modified web scraper to mine [Metacritic] and [VGChartz] for video game data
+  and its associated sales content.
+* Automated the process to seed the database with collected data from the scraper tool.
+* Django (1.11.7 ) backend REST API to serve games and friends information.
+  * Integrated with Google Natural Language API to analyze sentiment from collected user and critic reviews.
+* Angular2 (v.5) frontend application integrated with Materialize CSS Framework. 
+* Social authentication
 
-1. Install [docker-compose].
-   
-   ```bash
-   $ pip install docker-compose
-   ```
-   
-1. Build and run the [Docker] containers. This might take a while. 
-   You should be able to access GoodGames at localhost:8888. The backend
-   is served on localhost:8000.
+Missing Features
+----------------
+* Facebook login.
+* Display friends and what they are playing and reviewing.
 
-   ```bash
-   docker-compose -f docker-compose.dev.yml up -d --build
-   ```
+Potential Improvements
+----------------------
+* Cache results from Google Natural Language API and attach a session timeout so 
+  to not exhaust request tokens.
+* Utilize message queue or Pub/Sub service to schedule analysis tasks.
+* Completely fix up the frontend interface. Materialze CSS does not play well with Angular2. 
+* Rewrite DRF serializers to simplify parsing.
+* Reorganize frontend to modularize certain pages (gameresults page and search page are nearly identical, but exist as two separate components).
  
-## The Team
+Bugs
+----
+* Bug when logging out. Page does not update; need manual refresh to update data bindings.
+* Sticky footer does not stick.
+* Dropdown select menus are cutoff in mobile view.
 
-GoodGames is currently maintained by [Michelle Beard](https://www.linkedin.com/in/michelle-b-3756a815/).
+The Team
+--------
+GoodGames is currently maintained by [Michelle Beard].
 
-[Docker]: http://docker.com
-[docker-compose]: https://docs.docker.com/compose/install
-[virtualenv]: https://virtualenv.pypa.io/
+[VGChartz]: http://www.vgchartz.com/
+[Metacritic]: www.metacritic.com
+[Michelle Beard]: https://www.linkedin.com/in/michelle-b-3756a815/
