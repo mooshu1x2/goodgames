@@ -59,7 +59,10 @@ export class UserService {
     const url = `${this.authUrl}/sociallogin`;
     this.http.post(url, user, this.options) // ...using post request
       .map(res => console.log(res)) // ...and calling .json() on the response to return data
-      .catch((error: any) => Observable.throw( 'Server error'))
+      .catch(err  => {
+        console.log(err);
+        return Observable.throw(err);
+      })
       .subscribe();
   }
 

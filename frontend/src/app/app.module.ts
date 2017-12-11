@@ -31,7 +31,7 @@ import {StorageService} from './storage.service';
     GameResultsComponent,
     TeamComponent,
     DashboardComponent,
-    GameListComponent
+    GameListComponent,
   ],
   exports: [
   ],

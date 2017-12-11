@@ -26,5 +26,22 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-Deploy
+## Issues
+Unable to build production because of google-sigin component. Github issue reference:
+https://github.com/miltador/angular-google-signin/issues/24
+
+Workaround is to use this command
+  ```bash
+  ng build -prod --aot=false
+  ```
+
+## Deploy to [Firebase]
+Follow how to create a Firebase account [here]([Firebase]).
+
+## To Deploy to Firebase
+Update frontend/.firebase.rc `projects.default` variable to your Google project id.
+```bash
 npm run deploy
+```
+
+[Firebase]: https://firebase.google.com/docs/hosting/deploying

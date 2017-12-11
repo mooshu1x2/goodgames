@@ -23,7 +23,7 @@
 
         <tbody>
         <tr *ngFor="let d of data">
-          <td><i class="fa fa-twitch" aria-hidden="true"></i></td>
+          <td><img class="responsive-img" src="{{d.game.img_url}}"></td>
           <td><a routerLink="/games/{{d.game.id}}">{{d.game.title}}</a></td>
           <td>{{d.game.developer}}</td>
           <td>{{d.game.publisher}}</td>
@@ -31,7 +31,7 @@
           <td>{{d.game.critic_score || 0}}/100</td>
           <td>{{d.game.genre}}</td>
           <td>
-            <div class="col s2">
+            <div class="col s12">
             <select materialize="material_select" (change)="selected($event, d.game)" [materializeSelectOptions]="selectOptions">
               <option value="d.type" disabled selected>{{d.type}}</option>
               <option *ngFor="let option of options"
