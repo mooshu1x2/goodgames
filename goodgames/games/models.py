@@ -116,7 +116,8 @@ class Game(TimeStampedModel):
 
 	# Required
 	title = models.CharField(max_length=120)
-	description = models.CharField(max_length=512, default='')
+	description = models.CharField(max_length=2048, default='')
+	img_url = models.CharField(max_length=120, default='')
 	# is_sequel = models.BooleanField(default=False)
 	platform = models.CharField(max_length=30, choices=CONSOLE_OPTIONS)
 	genre = models.CharField(max_length=30, choices=GENRE_OPTIONS)

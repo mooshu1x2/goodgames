@@ -52,10 +52,17 @@ def create_game(client, users):
 
 	games = data['games']
 	for d in games:
-		print("Creating game {}...".format(d['name']))
+		name = d["name"].encode('ascii', 'ignore').decode('ascii')
+		desc = d["description"].encode('ascii', 'ignore').decode('ascii')
+		desc = desc[:1024] if len(desc) > 2048 else desc
+
+		print("Creating game {}...".format(name))
+
 		game = Game.objects.create(
-				title=d["name"],
+				title=name,
+				description=desc,
 				platform=d["platform"],
+				img_url=d["img_url"],
 				genre=d["genre"],
 				rating=d["rating"],
 				release_date=datetime.datetime.strptime(d["release_date"], "%b %d, %Y") if d["release_date"] else None,
@@ -73,7 +80,7 @@ def create_game(client, users):
 		)
 
 		critic_reviews = d['critic_reviews']
-		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), d['name']))
+		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), name))
 		for c in critic_reviews[:1]:
 			# Quick and dirty way to restrict length of comment to 1024 characters
 			desc = c[:1024] if len(c) > 1024 else c
@@ -96,7 +103,7 @@ def create_game(client, users):
 
 
 		user_reviews = d['user_reviews']
-		print("Creating {} user reviews for game {}...".format(len(user_reviews), d['name']))
+		print("Creating {} user reviews for game {}...".format(len(user_reviews), name))
 		for u in user_reviews[:1]:
 			# Quick and dirty way to restrict length of comment to 1024
 			# characters
@@ -122,7 +129,7 @@ def create_game(client, users):
 
 
 	# Pick a random assortment of games
-	choices = ['WANT TO PLAY', 'HAVE PLAYED', 'NEVER']
+	choices = ['WANT TO PLAY', 'HAVE PLAYED', 'NEVER', 'CURRENTLY PLAYING']
 
 	for u in users:
 		game_picks = random.sample(games, 5)

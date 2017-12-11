@@ -58,8 +58,8 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     # include providers you want to enable
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.facebook',
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
@@ -85,52 +85,51 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'goodgames.urls'
 
 LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL = 'http://localhost:4200'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'email'
-        ],
-        'AUTH_PARAMS': { 'access_type': 'online' }
-    },
-    'facebook':
-       {'METHOD': 'oauth2',
-        'SCOPE': ['email','public_profile', 'user_friends'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'FIELDS': [
-            'id',
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'verified',
-            'locale',
-            'timezone',
-            'link',
-            'gender',
-            'updated_time'],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': lambda request: 'kr_KR',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v2.4'}
-}
-
-#facebook
-SOCIAL_AUTH_FACEBOOK_KEY = '2069306053353814'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET ='2d84342104c4f0686f534a01302b5639' #app key
-
-# SECRETS
-SOCIAL_AUTH_SECRETS = {
-    'google': {
-        'client_id': '319120036661-fm549dr67ad0du26i9t72s7s9fcj6moo.apps.googleusercontent.com',
-        'client_secret': 'qvHCu6wWEm1WvTMqrxhtcJQv',
-    }
-}
-
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google'  : {
+#         'SCOPE'      : [
+#             'email'
+#         ],
+#         'AUTH_PARAMS': {'access_type': 'online'}
+#     },
+#     'facebook':
+#         {
+#             'METHOD'        : 'oauth2',
+#             'SCOPE'         : ['email', 'public_profile', 'user_friends'],
+#             'AUTH_PARAMS'   : {'auth_type': 'reauthenticate'},
+#             'FIELDS'        : [
+#                 'id',
+#                 'email',
+#                 'name',
+#                 'first_name',
+#                 'last_name',
+#                 'verified',
+#                 'locale',
+#                 'timezone',
+#                 'link',
+#                 'gender',
+#                 'updated_time'],
+#             'EXCHANGE_TOKEN': True,
+#             'LOCALE_FUNC'   : lambda request: 'kr_KR',
+#             'VERIFIED_EMAIL': False,
+#             'VERSION'       : 'v2.4'}
+# }
+#
+# # facebook
+# SOCIAL_AUTH_FACEBOOK_KEY = '2069306053353814'  # App ID
+# SOCIAL_AUTH_FACEBOOK_SECRET = '2d84342104c4f0686f534a01302b5639'  # app key
+#
+# # SECRETS
+# SOCIAL_AUTH_SECRETS = {
+#     'google': {
+#         'client_id'    : '319120036661-fm549dr67ad0du26i9t72s7s9fcj6moo.apps.googleusercontent.com',
+#         'client_secret': 'qvHCu6wWEm1WvTMqrxhtcJQv',
+#     }
+# }
 
 TEMPLATES = [
     {
@@ -158,11 +157,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# GAE Environment
 if os.getenv('GAE_INSTANCE'):
     DATABASES = {
         'default': {
+            # Default settings, make sure to update POSTGRES_NAME, POSTGRES_USER in Production
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("POSTGRES_NAME", 'test'),  # noqa: ignore=F405
+            'NAME': os.environ.get("POSTGRES_NAME", 'postgres'),  # noqa: ignore=F405
             'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
             'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
             'HOST': os.environ.get("POSTGRES_HOST", '/cloudsql/goodgames-185922:us-central1:goodgames-db'),  # noqa: ignore=F405
@@ -179,9 +180,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("POSTGRES_NAME", 'goodgames-test'),  # noqa: ignore=F405
+            'NAME': os.environ.get("POSTGRES_NAME", 'postgres'),  # noqa: ignore=F405
             'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
-            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
+            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'postgres'),  # noqa: ignore=F405
             'HOST': os.environ.get("POSTGRES_HOST", 'localhost'),  # noqa: ignore=F405
             'PORT': os.environ.get("POSTGRES_PORT", 5432),  # noqa: ignore=F405
         }

@@ -21,7 +21,7 @@ class CustomSerializer(serializers.HyperlinkedModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Game
-		fields = ('id', 'description', 'title', 'platform',
+		fields = ('id', 'description', 'img_url', 'title', 'platform',
 		          'genre', 'rating', 'release_date',
 		          'publisher', 'developer',
 		          'na_sales', 'eu_sales', 'jp_sales', 'ot_sales',

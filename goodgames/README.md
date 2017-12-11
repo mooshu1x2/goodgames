@@ -7,7 +7,7 @@ Installation Instructions on Local Machine
 Setting up GoodGames on your local machine is really easy.
 Follow this guide to setup your development machine.
 
-1. Install [python] 2.x, [git], [postgresql] version >= 9.4 and [virtualenv], in your computer, if you don't have it already.
+1. Install [python] 2.7, [git], [postgresql] version >= 9.4 and [virtualenv], in your computer, if you don't have it already.
 
 1. Get the source code on your machine via git.
 
@@ -21,17 +21,16 @@ Follow this guide to setup your development machine.
     cd goodgames
     virtualenv env
     source env/bin/activate  # run this command every time before working on project
-    pip install -r requirements/dev.txt
+    pip install -r requirements.txt
     ```
 
-4. Change credential in `settings/dev.py`. Use your postgres username and password for fields `USER` and `PASSWORD` in `dev.py` file.
+4. Change credentials in `goodgames/settings.py`. Use your postgres username and password for fields `USER` and `PASSWORD` in `settings.py` file.
 
 5. Create an empty postgres database and run database migration.
-
     ```
     sudo -i -u (username)
     createdb goodgames
-    python manage.py migrate --settings=settings.dev
+    python manage.py migrate
     ```
 
 6. Seed the database with some data to work with.
@@ -39,19 +38,20 @@ Follow this guide to setup your development machine.
     ```
     python manage.py seed --settings=settings.dev
     ```
-    This command also creates a `superuser(admin)` and a `participant user` with following credentials.
+    This command also creates a `superuser(admin)`, `host` and a `participant user` with following credentials.
 
     **SUPERUSER-** username: `admin` password: `password`  
+    **HOST-** username: `host` password: `password`  
     **PARTICIPANT USER-** username: `participant` password: `password`    
 
 7. That's it. Now you can run development server at [http://127.0.0.1:8000] (for serving backend)
 
     ```
-    python manage.py runserver --settings=settings.dev
+    python manage.py runserver
     ```
     
-Deploy GoodGames in Development Environment with Cloud SQL
-----------------------------------------------------------
+Deploy GoodGames in Development Environment connected to Cloud SQL
+------------------------------------------------------------------
 1. Install [Cloud SQL Proxy] to proxy your PostgreSQL database. 
 
 1. Connect to Google Cloud DB using [Cloud SQL Proxy].
@@ -140,9 +140,6 @@ Create a Cloud Storage bucket and make it publically readable. Replace <your-gcs
     ```bash
     https://goodgames-185922.appspot.com
     ```
-Deploy GoodGames to the Google Compute Engine
----------------------------------------------
-1. 
 
 [GoodGames]: https://goodgames-185922.appspot.com
 [python]: https://www.python.org/download/releases/2.7/

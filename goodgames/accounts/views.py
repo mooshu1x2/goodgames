@@ -16,16 +16,16 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from allauth.account.models import EmailAddress
 
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+# from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+#
+# from rest_auth.registration.views import SocialLoginView
 
-from rest_auth.registration.views import SocialLoginView
-
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
-
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter(FacebookOAuth2Adapter)
+# class GoogleLogin(SocialLoginView):
+#     adapter_class = GoogleOAuth2Adapter
+#
+# class FacebookLogin(SocialLoginView):
+#     adapter_class = FacebookOAuth2Adapter(FacebookOAuth2Adapter)
 
 # Create your views here.
 @throttle_classes([UserRateThrottle])
