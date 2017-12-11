@@ -36,9 +36,9 @@ Follow this guide to setup your development machine.
 6. Seed the database with some data to work with.
 
     ```
-    python manage.py seed --settings=settings.dev
+    python manage.py seed
     ```
-    This command also creates a `superuser(admin)`, `host` and a `participant user` with following credentials.
+    This command also creates a `superuser(admin)`, `host` and a `participant user` with the following credentials.
 
     **SUPERUSER-** username: `admin` password: `password`  
     **HOST-** username: `host` password: `password`  
