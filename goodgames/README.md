@@ -14,13 +14,20 @@ Seed Data using Cloud SQL Proxy and PostgresSQL
 
 1. Create [PostGreSQL] instance on Google Cloud. Your newly created database instance id will now 
    be referred to as [YOUR_INSTANCE_CONNECTION_NAME]. Make sure to also create a database, user, and password of your choosing.
-
+   Ensure that these variables are exported or manually edited in goodgames/settings.py
+   
+   ```bash
+   export POSTGRES_NAME=DB_NAME
+   export POSTGRES_USER=DB_USER
+   export POSTGRES_PASSWORD=DB_PASSWORD
+   ```
+   
 1. Connect to Google Cloud SQL using [Cloud SQL Proxy].
 
     ```bash
     ./cloud_sql_proxy -instances="[YOUR_INSTANCE_CONNECTION_NAME]"=tcp:5432
     ```
-1. Enable Google Cloud Natural Language API in the Google Developers Console.
+1. Enable Google [Cloud Natural Language API] in the Google Developers Console.
 
 1. Setup development environment
 
@@ -36,7 +43,7 @@ Seed Data using Cloud SQL Proxy and PostgresSQL
     this command. 
     
     Default is False. None of the user reviews or critic reviews
-    for games will be analyzed by Cloud Natural Language API.
+    for games will be analyzed by [Cloud Natural Language API].
     
     ```bash
     export ENABLE_CLOUD=True
@@ -190,3 +197,4 @@ Follow this guide to setup your development machine.
 [Cloud SQL Proxy]: https://cloud.google.com/appengine/docs/flexible/python/using-cloud-sql-postgres#setting_up_your_local_environment
 [quota]: https://cloud.google.com/natural-language/quotas
 [PostGreSQL]: https://cloud.google.com/sql/docs/postgres/quickstart
+[Cloud Natural Language API]: https://cloud.google.com/natural-language/
