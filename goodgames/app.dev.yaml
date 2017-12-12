@@ -1,0 +1,24 @@
+# [START runtime]
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT goodgames.wsgi
+
+beta_settings:
+    cloud_sql_instances: 'PROJECTID:REGION:INSTANCE_NAME'
+
+skip_files:
+- scripts/
+- static/
+- env/
+
+env_variables:
+  DB_NAME: 'postgres'
+  DB_USERNAME: 'postgres'
+  DB_PASSWORD: 'secret'
+  DB_HOST: '/cloudsql/PROJECTID:REGION:INSTANCE_NAME'
+  SECRET_KEY: 'DJANGO_SECRET_KEY'
+  STATIC_URL: ''https://storage.googleapis.com/<project_id>/static/'
+
+runtime_config:
+  python_version: 2
+# [END runtime]

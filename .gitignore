@@ -10,6 +10,9 @@ __pycache__
 env
 venv
 
+# Deployment files
+goodgames/app.yaml
+
 scripts
 # Credentials
 docker/credentials.json

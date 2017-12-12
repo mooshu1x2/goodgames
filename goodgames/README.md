@@ -120,6 +120,8 @@ Deploy GoodGames to the Google App Engine Flexible Environment
 1. Create [PostGreSQL] instance on Google Cloud. Your newly created database instance id will now 
    be referred to as [YOUR_INSTANCE_CONNECTION_NAME]
 
+1. Add your database credentials in goodgames/app.yaml.
+
 1. Make sure gcloud is in your PATH
 
     ```bash
@@ -135,7 +137,7 @@ Create a Cloud Storage bucket and make it publicly readable. Replace <your-gcs-b
     gsutil defacl -p <project-id> set public-read gs://[YOUR-GCS-BUCKET]
     ```
 
-1. Update goodgames/settings.py `STATIC_URL` to [YOUR-GCS-BUCKET]/static 
+1. Update goodgames/app.yaml `STATIC_URL` to [YOUR-GCS-BUCKET]/static 
 
 1. Gather all the static content locally into one folder:
 
