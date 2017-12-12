@@ -10,14 +10,19 @@ How to Start
 1. GoodGames
 1. Frontend
 
+Assumptions
+-----------
+* Already have a Google Developers account created.
+* Already have the latest Cloud Tools (v. 182.0.0) installed.
+* Running either Linux or Mac. Deployment steps have not been tests on Windows.
+* Already created a project in the Google Developers Console.
+* Have `python 2.7` and `virtualenv` installed on your machine. 
+
 Deployment Options
 ------------------
-* Deploy GoodGames in Development Environment
+* Deploy GoodGames in Local Development Environment
 * Deploy GoodGames to the Google App Engine Flexible Environment
 * Deploy GoodGames with Docker
-
-If you do not have a Google Cloud account and just want to simply deploy
-GoodGames, use Docker.
 
 Current Features
 ----------------
@@ -54,6 +59,7 @@ Bugs
 * Sticky footer does not stick.
 * Dropdown select menus are cutoff in mobile view.
 * Search icon overlaps textbox.
+* Angular AOT bug for google-signin component.
 
 The Team
 --------

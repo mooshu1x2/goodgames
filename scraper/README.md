@@ -14,7 +14,7 @@ How to Run
     
 1. Run scraper and collect raw game data. Note: Can skip this step
    if referencing GoodGames DB.
-   For example, we will be collecting 50 games from metacritic, including critic and user reviews.
+   For example, we will be collecting 50 games from [Metacritic.com](www.metacritic.com), including critic and user reviews.
     ```bash
     python scrape.py -m 50 -r True -w 1
     ```

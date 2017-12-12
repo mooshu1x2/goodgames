@@ -2,9 +2,9 @@
 
 ## Install
 
-1. Install npm 5.x or above.
+1. Install [node](https://nodejs.org/en/) 8.9 or above.
 
-1. Install Angular globally.
+1. Install [Angular](https://angular.io/) globally.
    ```bash
    npm install -g @angular/cli
    ``` 
@@ -37,7 +37,10 @@ Follow instructions on how to create a Firebase account [here]([Firebase]).
    I have deployed the development version to Firebase. 
     
     ```bash
+    # Production
     ng build --prod --aot=false
+    # Development -- recommended for now
+    ng build
     ```
     The`dist` directory is all that is needed to deploy the `frontend` app to [Firebase].
     
