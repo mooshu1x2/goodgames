@@ -1,5 +1,47 @@
 # Frontend
 
+## Install
+
+1. Run `npm install` command to install all dependencies.
+
+1. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. 
+   The app will automatically reload if you change any of the source files.
+
+## Deploy to [Firebase]
+Follow instructions on how to create a Firebase account [here]([Firebase]).
+
+## To Deploy to [Firebase]
+1. Update frontend/.firebase.rc `projects.default` variable to your Google project id.
+
+1. Update frontend/src/environments/environment.prod.ts to point to the GoodGames API endpoint. 
+    ```javascript
+      export const environment = {
+        production: true,
+        api_url: 'https://goodgames-production.appspot.com/api',
+        google_client_id: GOOGLE_CLIENT_ID
+      };
+    ```
+ 
+1. Setup OAuth in Google Developers Console. Ensure that http://localhost:4200 and https://goodgames-production.firebaseapp.com are whitelisted.
+
+1. Build production assets. Build fails when building production assets because of google-sigin component. 
+   Github [issue](https://github.com/miltador/angular-google-signin/issues/24) reference. An easy workaround is 
+   to disable aot checking when deploying to production. However, this still causes issues, so in the mean time
+   I have deployed the development version to Firebase. 
+    
+    ```bash
+    ng build --prod --aot=false
+    ```
+    The`dist` directory is all that is needed to deploy the `frontend` app to [Firebase].
+    
+1. Deploy frontend application to [Firebase]. This script also builds the production assets (above). 
+
+    ```bash
+    npm run deploy
+    ```
+
+1. Visit https://goodgames-production.firebaseapp.com.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
 
 ## Development server
@@ -25,25 +67,5 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-## Issues
-Unable to build production because of google-sigin component. Github [issue](https://github.com/miltador/angular-google-signin/issues/24) reference.
-
-Workaround is to use this command
-  ```bash
-  ng build -prod --aot=false
-  ```
-
-## Deploy to [Firebase]
-Follow instructions on how to create a Firebase account [here]([Firebase]).
-
-## To Deploy to [Firebase]
-Update frontend/.firebase.rc `projects.default` variable to your Google project id and then run:
-
-```bash
-npm run deploy
-```
-
-Visit https://goodgames-185922.firebaseapp.com.
 
 [Firebase]: https://firebase.google.com/docs/hosting/deploying

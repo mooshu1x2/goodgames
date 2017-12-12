@@ -17,7 +17,6 @@ from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 
-ENABLE_CLOUD = False
 
 def create_user(is_admin, username=""):
 	"""
@@ -28,17 +27,20 @@ def create_user(is_admin, username=""):
 		email = "admin@example.com"
 	else:
 		email = "%s@example.com" % (username)
-	user = User.objects.create_user(
+
+	user, created = User.objects.get_or_create(
 			email=email,
 			username=username,
-			password="password",
 			is_staff=is_admin,
 			is_superuser=is_admin,
+			password="password"
 	)
-	EmailAddress.objects.create(user=user, email=email, verified=True,
-	                            primary=True)
+
+	_, e_created = EmailAddress.objects.get_or_create(user=user, email=email,
+	                                                  verified=True,
+	                                                  primary=True)
 	print("{} was created with username: {} password: password".format(
-		"Super user" if is_admin else "User", username))
+			"Super user" if is_admin else "User", username))
 	return user
 
 
@@ -58,15 +60,16 @@ def create_game(users):
 		desc = desc[:1024] if len(desc) > 2048 else desc
 
 		print("Creating game {}...".format(name))
-
-		game = Game.objects.create(
+		game, _ = Game.objects.get_or_create(
 				title=name,
 				description=desc,
 				platform=d["platform"],
 				img_url=d["img_url"],
 				genre=d["genre"],
 				rating=d["rating"],
-				release_date=datetime.datetime.strptime(d["release_date"], "%b %d, %Y") if d["release_date"] else None,
+				release_date=datetime.datetime.strptime(d["release_date"],
+				                                        "%b %d, %Y") if d[
+					"release_date"] else None,
 				publisher=d["publisher"],
 				developer=d["developer"],
 				na_sales=d["na_sales"] if d["na_sales"] else None,
@@ -84,74 +87,85 @@ def create_game(users):
 		print("Creating {} critic reviews for game {}...".format(len(critic_reviews), name))
 
 		client = None
-		if ENABLE_CLOUD:
+		if os.environ.get("GAE_INSTANCE") or os.environ.get("ENABLE_CLOUD"):
 			client = language.LanguageServiceClient()
 
-		for c in critic_reviews[:1]:
+		for c in critic_reviews[:10]:
 			# Quick and dirty way to restrict length of comment to 1024 characters
 			desc = c[:1024] if len(c) > 1024 else c
 			desc = desc.encode('ascii', 'ignore')
 
-			if ENABLE_CLOUD:
-				document = types.Document(content=desc,
-				                          type=enums.Document.Type.PLAIN_TEXT)
-				# Detects the sentiment of the text
-				sentiment = client.analyze_sentiment(document=document).document_sentiment
-				print('Sentiment: {}, {}'.format(sentiment.score,
-				                                 sentiment.magnitude))
-				comment = Comment.objects.create(
-						game=game,
-						description=desc,
-						is_critic=True,
-						is_user=False,
-						sentiment_score=format(sentiment.score, '.3f'),
-						sentiment_magnitude=format(sentiment.magnitude, '.3f'),
-				)
-				time.sleep(1)
+			# Create comment first, and then apply NLP
+			comment, created = Comment.objects.get_or_create(
+					game=game,
+					description=desc,
+					is_critic=True,
+					is_user=False,
+			)
+
+			if os.environ.get("GAE_INSTANCE") or os.environ.get("ENABLE_CLOUD"):
+				try:
+					if created:
+						document = types.Document(content=desc,
+						                          type=enums.Document.Type.PLAIN_TEXT)
+						# Detects the sentiment of the text
+						sentiment = client.analyze_sentiment(document=document).document_sentiment
+						print('Sentiment: {}, {}'.format(sentiment.score,
+						                                 sentiment.magnitude))
+
+						comment.sentiment_score = format(sentiment.score, '.3f')
+						comment.sentiment_magnitude = format(sentiment.magnitude,
+						                                     '.3f')
+						comment.save()
+						time.sleep(0.4)
+				except:
+					print("NLP error occurred...skipping")
+					pass
 			else:
-				comment = Comment.objects.create(
-						game=game,
-						description=desc,
-						is_critic=True,
-						is_user=False,
-						sentiment_score=0,
-						sentiment_magnitude=0
-				)
+				comment.sentiment_score = 0
+				comment.sentiment_magnitude = 0
+				comment.save()
 
 		user_reviews = d['user_reviews']
 		print("Creating {} user reviews for game {}...".format(len(user_reviews), name))
-		for u in user_reviews[:1]:
+		for u in user_reviews[:10]:
 			# Quick and dirty way to restrict length of comment to 1024
 			# characters
 			desc = u[:1024] if len(u) > 1024 else u
 			desc = desc.encode('ascii', 'ignore')
 
-			if ENABLE_CLOUD:
-				document = types.Document(content=desc,
-				                          type=enums.Document.Type.PLAIN_TEXT)
+			# Create comment first, and then apply NLP
+			comment, created = Comment.objects.get_or_create(
+					game=game,
+					description=desc,
+					is_critic=False,
+					is_user=True,
+			)
 
+			if os.environ.get("GAE_INSTANCE") or os.environ.get("ENABLE_CLOUD"):
 				# Detects the sentiment of the text
-				sentiment = client.analyze_sentiment(document=document).document_sentiment
-				print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))
+				try:
+					if created:
+						document = types.Document(content=desc,
+						                          type=enums.Document.Type.PLAIN_TEXT)
 
-				comment = Comment.objects.create(
-						game=game,
-						description=desc,
-						is_critic=False,
-						is_user=True,
-						sentiment_score=format(sentiment.score, '.3f'),
-						sentiment_magnitude=format(sentiment.magnitude, '.3f'),
-				)
-				time.sleep(1)
+						sentiment = client.analyze_sentiment(
+							document=document).document_sentiment
+						print('Sentiment: {}, {}'.format(sentiment.score,
+						                                 sentiment.magnitude))
+
+						comment.sentiment_score = format(sentiment.score, '.3f')
+						comment.sentiment_magnitude = format(sentiment.magnitude,
+						                                     '.3f')
+						comment.save()
+						time.sleep(0.4)
+				except:
+					print("NLP error occurred...skipping")
+					pass
 			else:
-				comment = Comment.objects.create(
-						game=game,
-						description=desc,
-						is_critic=False,
-						is_user=True,
-						sentiment_score=0,
-						sentiment_magnitude=0,
-				)
+				comment.sentiment_score = 0
+				comment.sentiment_magnitude = 0
+				comment.save()
 
 	# Pick a random assortment of games
 	choices = ['WANT TO PLAY', 'HAVE PLAYED', 'NEVER', 'CURRENTLY PLAYING']
@@ -167,9 +181,9 @@ def create_game(users):
 			options = {'title': i['name'], 'platform': i['platform']}
 			game_pick = Game.objects.get(**options)
 			# Curate game list for this user
-			game_list = GameList.objects.create(user=u, game=game_pick, type=choice)
+			GameList.objects.get_or_create(user=u, game=game_pick, type=choice)
 
-		friend = Friend.objects.create(user=u, friend=friend_pick)
+		Friend.objects.get_or_create(user=u, friend=friend_pick)
 
 def run(*args, **options):
 	# Create superuser

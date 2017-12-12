@@ -5,7 +5,8 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:8000/api',
-  google_client_id: '319120036661-fm549dr67ad0du26i9t72s7s9fcj6moo.apps.googleusercontent.com',
+  api_url: 'https://goodgames-production.appspot.com/api',
+  // api_url: 'http://localhost:8000/api',
+  google_client_id: '766685739397-t00j4uvtpfn0fnkq2drqiiip3i4kl09l.apps.googleusercontent.com',
   facebook_client_id: '2069306053353814',
 };

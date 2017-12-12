@@ -9,8 +9,8 @@ Using Docker
    $ pip install docker-compose
    ```
    
-1. Register your GoogleCloud Account and make sure to ENABLE_CLOUD 
-   in the goodgames backend service. Instructions can be found in the goodgames README.
+1. Register your GoogleCloud Account and make sure to update the `ENABLE_CLOUD`
+   environment variable in `docker/dev/django/container-start.sh`.
    
    Export your credentials file (named credentials.json) and place it in the
    docker/ directory.

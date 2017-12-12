@@ -43,6 +43,7 @@ Potential Improvements
 * Rewrite DRF serializers to simplify parsing.
 * Reorganize frontend to modularize certain pages (gameresults page and search page are nearly identical, but exist as two separate components).
 * Learn more about how to integrate OAuth2 with Django backend. All authenticaton was performed in frontend.  
+* Setup pagination on the search results, dashboard, and comments page.
 
 Bugs
 ----

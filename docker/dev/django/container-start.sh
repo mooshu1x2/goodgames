@@ -1,4 +1,5 @@
 #!/bin/sh
+export ENABLE_CLOUD=True
 export GOOGLE_APPLICATION_CREDENTIALS=/code/docker/credentials.json
 
 # Use your own credentials file here.

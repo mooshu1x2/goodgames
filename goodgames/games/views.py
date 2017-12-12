@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
+
 from itertools import chain
 
 from rest_framework import permissions, status
@@ -30,7 +32,6 @@ from google.cloud.language import types
 from django.db.models import Q
 import operator
 
-ENABLE_CLOUD = False
 # Create your views here.
 
 @throttle_classes([UserRateThrottle])
@@ -160,7 +161,7 @@ def sentiment(request, pk):
 			comment_str += c
 
 		results = []
-		if ENABLE_CLOUD:
+		if os.environ.get("GAE_INSTANCE") or os.environ.get("ENABLE_CLOUD"):
 			# Instantiates a client
 			client = language.LanguageServiceClient()
 			document = types.Document(content=comment_str,

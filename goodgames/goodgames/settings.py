@@ -20,15 +20,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^8%yo6a3gpuh%7e29(p$x^y=-&78ne4gu%%2_@2^3w4*wyt(cs'
+# Dev secret key as example, but better to store it as an environment variable.
+SECRET_KEY = os.getenv('SECRET_KEY', '^8%yo6a3gpuh%7e29(p$x^y=-&78ne4gu%%2_@2^3w4*wyt(cs')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL = DEBUG
-CORS_ORIGIN_WHITELIST = ('localhost:4200',
-                         'https://goodgames-185922.firebaseapp.com')
+CORS_ORIGIN_WHITELIST = ('http://localhost:4200',
+                         'https://goodgames-production.firebaseapp.com')
 APPEND_SLASH = False
 
 # Application definition
@@ -120,14 +120,14 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # }
 #
 # # facebook
-# SOCIAL_AUTH_FACEBOOK_KEY = '2069306053353814'  # App ID
-# SOCIAL_AUTH_FACEBOOK_SECRET = '2d84342104c4f0686f534a01302b5639'  # app key
+# SOCIAL_AUTH_FACEBOOK_KEY =   # App ID
+# SOCIAL_AUTH_FACEBOOK_SECRET = # app key
 #
 # # SECRETS
 # SOCIAL_AUTH_SECRETS = {
 #     'google': {
-#         'client_id'    : '319120036661-fm549dr67ad0du26i9t72s7s9fcj6moo.apps.googleusercontent.com',
-#         'client_secret': 'qvHCu6wWEm1WvTMqrxhtcJQv',
+#         'client_id'    : '',
+#         'client_secret': '',
 #     }
 # }
 
@@ -152,7 +152,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'goodgames.wsgi.application'
 
 # CORS Settings
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -161,13 +161,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 if os.getenv('GAE_INSTANCE'):
     DATABASES = {
         'default': {
-            # Default settings, make sure to update POSTGRES_NAME, POSTGRES_USER in Production
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("POSTGRES_NAME", 'postgres'),  # noqa: ignore=F405
-            'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
-            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
-            'HOST': os.environ.get("POSTGRES_HOST", '/cloudsql/goodgames-185922:us-central1:goodgames-db'),  # noqa: ignore=F405
-            'PORT': os.environ.get("POSTGRES_PORT", 5432),  # noqa: ignore=F405
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USERNAME'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST')
         }
     }
 else:
@@ -182,7 +180,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ.get("POSTGRES_NAME", 'postgres'),  # noqa: ignore=F405
             'USER': os.environ.get("POSTGRES_USER", 'postgres'),  # noqa: ignore=F405
-            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'postgres'),  # noqa: ignore=F405
+            'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'secret'),  # noqa: ignore=F405
             'HOST': os.environ.get("POSTGRES_HOST", 'localhost'),  # noqa: ignore=F405
             'PORT': os.environ.get("POSTGRES_PORT", 5432),  # noqa: ignore=F405
         }
@@ -234,7 +232,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 if os.getenv('GAE_INSTANCE'):
-    STATIC_URL = 'https://storage.googleapis.com/goodgames-185922/static/'
+    STATIC_URL = os.getenv("STATIC_URL", 'static/')
 else:
     STATIC_URL = '/static/'
 
