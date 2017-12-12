@@ -5,6 +5,7 @@ see what their friends are playing, agnostic of console/pc platforms.
 
 How to Start
 ------------
+1. [Main site](https://goodgames-production.firebaseapp.com) and [REST Client](https://goodgames-production.appspot.com/docs/)
 1. Scraper
 1. GoodGames
 1. Frontend

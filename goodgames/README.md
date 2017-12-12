@@ -114,6 +114,11 @@ Deploy GoodGames in Development Environment connected to Cloud SQL
 
 Deploy GoodGames to the Google App Engine Flexible Environment
 --------------------------------------------------------------
+1. Copy app.dev.yaml to app.yaml
+      ```javascript
+      cp app.dev.yaml app.yaml
+      ```
+
 1. All instructions to deploy a Django app in the Google Flex Environment
    can be found [here](https://cloud.google.com/python/django/flexible-environment#deploy_the_app_to_the_app_engine_flexible_environment). 
 
@@ -139,6 +144,12 @@ Create a Cloud Storage bucket and make it publicly readable. Replace <your-gcs-b
 
 1. Update goodgames/app.yaml `STATIC_URL` to [YOUR-GCS-BUCKET]/static 
 
+1. Generate a `Django secret key` for your project and set it in goodgames/app.yaml.
+   ```python
+    #https://foxrow.com/generating-django-secret-keys
+    import random
+    ''.join(random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50))
+   ```
 1. Gather all the static content locally into one folder:
 
     ```bash

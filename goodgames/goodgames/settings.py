@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Dev secret key as example, but better to store it as an environment variable.
-SECRET_KEY = os.getenv('SECRET_KEY', '^8%yo6a3gpuh%7e29(p$x^y=-&78ne4gu%%2_@2^3w4*wyt(cs')
+SECRET_KEY = os.getenv('SECRET_KEY', 'DUMBSECRETYKEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -175,6 +175,7 @@ else:
     #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:5432
     #
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
+    # CANONICAL configuration. Never set this in production!!!
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
