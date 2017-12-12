@@ -2,8 +2,15 @@
 
 ## Install
 
-1. Run `npm install` command to install all dependencies.
+1. Install npm 5.x or above.
 
+1. Install Angular globally.
+   ```bash
+   npm install -g @angular/cli
+   ``` 
+   
+1. Run `npm install` command to install all dependencies.
+   
 1. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. 
    The app will automatically reload if you change any of the source files.
 
@@ -13,7 +20,9 @@ Follow instructions on how to create a Firebase account [here]([Firebase]).
 ## To Deploy to [Firebase]
 1. Update frontend/.firebase.rc `projects.default` variable to your Google project id.
 
-1. Update frontend/src/environments/environment.prod.ts to point to the GoodGames API endpoint. 
+1. Setup OAuth in Google Developers Console. Ensure that http://localhost:4200 and https://goodgames-production.firebaseapp.com are whitelisted.
+
+1. Update frontend/src/environments/environment.prod.ts and frontend/src/environments/environment.ts to point to the GoodGames API endpoint. 
     ```javascript
       export const environment = {
         production: true,
@@ -21,8 +30,6 @@ Follow instructions on how to create a Firebase account [here]([Firebase]).
         google_client_id: GOOGLE_CLIENT_ID
       };
     ```
- 
-1. Setup OAuth in Google Developers Console. Ensure that http://localhost:4200 and https://goodgames-production.firebaseapp.com are whitelisted.
 
 1. Build production assets. Build fails when building production assets because of google-sigin component. 
    Github [issue](https://github.com/miltador/angular-google-signin/issues/24) reference. An easy workaround is 
@@ -41,6 +48,8 @@ Follow instructions on how to create a Firebase account [here]([Firebase]).
     ```
 
 1. Visit https://goodgames-production.firebaseapp.com.
+
+## Angular Notes
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
 

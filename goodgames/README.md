@@ -114,7 +114,7 @@ Deploy GoodGames in Development Environment connected to Cloud SQL
 
 Deploy GoodGames to the Google App Engine Flexible Environment
 --------------------------------------------------------------
-1. Copy app.dev.yaml to app.yaml
+1. Copy `app.dev.yaml` to `app.yaml`
       ```javascript
       cp app.dev.yaml app.yaml
       ```
@@ -125,9 +125,9 @@ Deploy GoodGames to the Google App Engine Flexible Environment
 1. Create [PostGreSQL] instance on Google Cloud. Your newly created database instance id will now 
    be referred to as [YOUR_INSTANCE_CONNECTION_NAME]
 
-1. Add your database credentials in goodgames/app.yaml.
+1. Add your database credentials in `app.yaml`.
 
-1. Make sure gcloud is in your PATH
+1. Make sure `gcloud` is in your PATH
 
     ```bash
     source ~/Applications/google-cloud-sdk/completion.bash.inc
@@ -142,9 +142,9 @@ Create a Cloud Storage bucket and make it publicly readable. Replace <your-gcs-b
     gsutil defacl -p <project-id> set public-read gs://[YOUR-GCS-BUCKET]
     ```
 
-1. Update goodgames/app.yaml `STATIC_URL` to [YOUR-GCS-BUCKET]/static 
+1. Update `app.yaml` `STATIC_URL` to [YOUR-GCS-BUCKET]/static 
 
-1. Generate a `Django secret key` for your project and set it in goodgames/app.yaml.
+1. Generate a `Django secret key` for your project and set it in `app.yaml`.
    ```python
     #https://foxrow.com/generating-django-secret-keys
     import random
@@ -162,7 +162,7 @@ Create a Cloud Storage bucket and make it publicly readable. Replace <your-gcs-b
     gsutil rsync -R static/ gs://[YOUR-GCS-BUCKET]/static
     ```
     
-1. Update goodgames/app.yaml `cloud_sql_instances` variable to point to [YOUR_INSTANCE_CONNECTION_NAME]
+1. Update `app.yaml` `cloud_sql_instances` variable to point to [YOUR_INSTANCE_CONNECTION_NAME]
 
 1. Enable Google Cloud Natural Language API in the Google Developers Console.
 

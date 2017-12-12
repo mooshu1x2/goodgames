@@ -5,7 +5,7 @@ see what their friends are playing, agnostic of console/pc platforms.
 
 How to Start
 ------------
-1. [Main site](https://goodgames-production.firebaseapp.com) and [REST Client](https://goodgames-production.appspot.com/docs/)
+1. [Frontend](https://goodgames-production.firebaseapp.com) and [GoodGames](https://goodgames-production.appspot.com/docs/)
 1. Scraper
 1. GoodGames
 1. Frontend
@@ -28,6 +28,7 @@ Current Features
   * Integrated with Google Natural Language API to analyze sentiment from collected user and critic reviews.
 * Angular2 (v.5) frontend application integrated with Materialize CSS Framework. 
 * Google authentication
+* Basic search and filtering
 
 Missing Features
 ----------------
@@ -45,6 +46,7 @@ Potential Improvements
 * Reorganize frontend to modularize certain pages (gameresults page and search page are nearly identical, but exist as two separate components).
 * Learn more about how to integrate OAuth2 with Django backend. All authenticaton was performed in frontend.  
 * Setup pagination on the search results, dashboard, and comments page.
+* CORS is still an issue, but for now I've disabled CORS checking. 
 
 Bugs
 ----
