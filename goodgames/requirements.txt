@@ -12,7 +12,7 @@ django-import-export==0.5.1
 django-rest-auth==0.9.2
 django-rest-framework==0.1.0
 django-rest-swagger==2.1.2
-djangorestframework==3.7.3
+djangorestframework==3.11.2
 enum34==1.1.6
 et-xmlfile==1.0.1
 futures==3.2.0
